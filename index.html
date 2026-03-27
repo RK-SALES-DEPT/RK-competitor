@@ -7,139 +7,102 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!--
-    Favicon: положи v-rk-32.png рядом с этим файлом.
-    Если файла нет — просто убери строку ниже.
-  -->
   <link rel="icon" type="image/png" href="v-rk-32.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="page">
+<div class="page">
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      ЛОГОТИП
-      ► Чтобы заменить логотип:
-          1. Положи новый файл рядом с index.html
-          2. Исправь srcset и src ниже
-      ► Если файлов логотипа нет — автоматически покажется
-        текстовый fallback «Robokassa» (через onerror)
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div class="brand-row">
-      <picture class="brand-picture">
-        <source media="(max-width: 768px)" srcset="icon_robokassa_black.png">
-        <img
-          class="brand-logo"
-          src="logo_robokassa_black.png"
-          alt="Robokassa"
-          onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';"
-        >
-      </picture>
-      <!-- Текстовый fallback на случай отсутствия файла логотипа -->
-      <span id="logo-fallback" class="logo-fallback" style="display:none">Robokassa</span>
-    </div>
+  <!-- ─── ЛОГОТИП ───────────────────────────────────────────────────
+    Чтобы заменить: положи новые файлы рядом и исправь src/srcset.
+    Если файла нет — автоматически появится текст «Robokassa».
+  ──────────────────────────────────────────────────────────────── -->
+  <div class="brand-row">
+    <picture class="brand-picture">
+      <source media="(max-width: 768px)" srcset="icon_robokassa_black.png">
+      <img class="brand-logo" src="logo_robokassa_black.png" alt="Robokassa"
+           onerror="this.style.display='none';document.getElementById('logo-fb').style.display='block'">
+    </picture>
+    <span id="logo-fb" class="logo-fallback" style="display:none">Robokassa</span>
+  </div>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      HERO
-      ► Заголовок и подзаголовок — меняй текст прямо здесь
-    ══════════════════════════════════════════════════════════════
-    -->
-    <section class="hero">
-      <h1>Сравнение с конкурентами</h1>
-      <p>Для менеджеров отдела продаж</p>
-    </section>
+  <!-- ─── ЗАГОЛОВОК ─────────────────────────────────────────────────
+    Текст меняй прямо здесь.
+  ──────────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <h1>Сравнение с конкурентами</h1>
+    <p>Инструмент отдела продаж</p>
+  </section>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      СЛУЖЕБНАЯ ПЛАШКА
-      ► Текст плашки можно менять прямо здесь
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div class="internal-badge">
-      <span class="internal-badge__icon">⚠</span>
-      Внутренний инструмент для менеджеров. Не для клиентской отправки.
-    </div>
+  <!-- ─── СЛУЖЕБНАЯ ПЛАШКА ──────────────────────────────────────────
+    Текст меняй прямо здесь.
+  ──────────────────────────────────────────────────────────────── -->
+  <div class="internal-badge">
+    <span class="internal-badge__icon">⚠</span>
+    Внутренний инструмент для менеджеров. Не для клиентской отправки.
+  </div>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      ПАНЕЛЬ УПРАВЛЕНИЯ
-      Dropdown конкурентов заполняется из data.js автоматически.
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div class="card controls-card">
-      <div class="controls-row">
+  <!-- ─── ПАНЕЛЬ УПРАВЛЕНИЯ ──────────────────────────────────────────
+    Dropdown заполняется из data.js (providers[]) автоматически.
+  ──────────────────────────────────────────────────────────────── -->
+  <div class="card controls-card">
+    <div class="controls-row">
 
-        <!-- Выбор конкурента -->
-        <div class="control-group">
-          <label class="control-label" for="competitor-select">Сравнить с</label>
-          <div class="select-wrap">
-            <select id="competitor-select" class="competitor-select">
-              <!-- Заполняется из script.js на основе providers[] в data.js -->
-            </select>
-          </div>
+      <div class="control-group">
+        <label class="control-label" for="competitor-select">Сравнить с</label>
+        <div class="select-wrap">
+          <select id="competitor-select" class="competitor-select">
+            <!-- заполняется script.js -->
+          </select>
         </div>
+      </div>
 
-        <!-- Режим отображения -->
-        <div class="control-group">
-          <label class="control-label">Режим</label>
-          <div class="switcher" role="group" aria-label="Режим отображения">
-            <button type="button" id="btn-all" class="active">Все параметры</button>
-            <button type="button" id="btn-diff">Только отличия</button>
-          </div>
+      <div class="control-group">
+        <label class="control-label">Режим отображения</label>
+        <div class="switcher">
+          <button type="button" id="btn-all" class="active">Все параметры</button>
+          <button type="button" id="btn-diff">Только отличия</button>
         </div>
-
-        <!-- Счётчик отличий (показывается только в режиме «Только отличия») -->
-        <div class="diff-counter" id="diff-counter" aria-live="polite">
-          Найдено отличий:
-          <span class="diff-counter__num" id="diff-counter-num">0</span>
-        </div>
-
       </div>
+
+      <div class="diff-counter" id="diff-counter">
+        Отличий: <span class="diff-counter__num" id="diff-counter-num">0</span>
+      </div>
+
     </div>
+  </div>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      STICKY-ШАПКА КОЛОНОК
-      Обновляется script.js при смене конкурента.
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div class="compare-sticky-header">
-      <div class="csh-label">Параметр</div>
-      <div class="csh-col">
-        <span class="csh-name" id="header-primary">Robokassa</span>
-        <span class="csh-tag csh-tag--primary">Ваш продукт</span>
-      </div>
-      <div class="csh-col">
-        <span class="csh-name" id="header-competitor">—</span>
-        <span class="csh-tag csh-tag--competitor">Конкурент</span>
-      </div>
+  <!-- ─── STICKY-ШАПКА КОЛОНОК ───────────────────────────────────── -->
+  <div class="compare-header">
+    <div class="ch-cell">
+      <span class="ch-eyebrow">Параметр</span>
     </div>
+    <div class="ch-cell">
+      <span class="ch-eyebrow">Ваш продукт</span>
+      <span class="ch-name">Robokassa</span>
+      <span class="ch-tag ch-tag--primary">Рекомендуем</span>
+    </div>
+    <div class="ch-cell">
+      <span class="ch-eyebrow">Конкурент</span>
+      <span class="ch-name" id="ch-competitor-name">—</span>
+      <span class="ch-tag ch-tag--rival">Сравниваем</span>
+    </div>
+  </div>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      КЛЮЧЕВЫЕ ОТЛИЧИЯ
-      Рендерится из script.js. Данные — в highlights[] конкурента в data.js.
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div id="highlights-area"></div>
+  <!-- ─── КЛЮЧЕВЫЕ ОТЛИЧИЯ ───────────────────────────────────────────
+    Рендерится из script.js. Данные — highlights[] в data.js.
+  ──────────────────────────────────────────────────────────────── -->
+  <div id="highlights-area"></div>
 
-    <!--
-    ══════════════════════════════════════════════════════════════
-      СЕКЦИИ СРАВНЕНИЯ
-      Рендерятся из script.js. Данные — sections[] и providers[] в data.js.
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div id="comparison-area"></div>
+  <!-- ─── БЛОКИ СРАВНЕНИЯ ────────────────────────────────────────────
+    Рендерится из script.js. Данные — sections[] + providers[] в data.js.
+  ──────────────────────────────────────────────────────────────── -->
+  <div id="comparison-area"></div>
 
-  </div><!-- /.page -->
+</div><!-- /.page -->
 
-  <!--
-    Порядок важен: сначала data.js (данные), потом script.js (логика).
-  -->
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+<!-- Порядок важен: data.js раньше script.js -->
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
