@@ -1,635 +1,145 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Robokassa VS конкуренты</title>
+  <title>Сравнение с конкурентами | Robokassa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --rk-blue: #525FFB;
-      --rk-blue-hover: #3D49F0;
-      --rk-bg: #F2F5FA;
-      --rk-white: #FFFFFF;
-      --rk-success: #0D9F6E;
-      --rk-success-bg: #EAF8F2;
-      --rk-danger: #D93547;
-      --rk-danger-bg: #FFF1F3;
-      --rk-warning: #C78313;
-      --rk-warning-bg: #FFF7E8;
-      --rk-border: #E2E7F1;
-      --rk-text: #182033;
-      --rk-text-muted: #6B7394;
-      --rk-radius: 20px;
-      --rk-radius-sm: 14px;
-      --rk-shadow: 0 10px 30px rgba(29, 37, 74, 0.08);
-      --rk-shadow-sm: 0 4px 14px rgba(29, 37, 74, 0.06);
-      --rk-font: 'Geologica', sans-serif;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      padding: 32px 20px 48px;
-      font-family: var(--rk-font);
-      background: var(--rk-bg);
-      color: var(--rk-text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    .page {
-      width: 100%;
-      max-width: 1160px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .brand-logo-wrap {
-      display: inline-flex; align-items: center; gap: 12px;
-    }
-    .brand-fallback {
-      display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 28px; color: var(--rk-text);
-      letter-spacing: -0.03em;
-    }
-    .brand-mark {
-      width: 40px; height: 40px; border-radius: 14px; background: linear-gradient(135deg, var(--rk-blue), #7B84FF);
-      display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; box-shadow: 0 8px 18px rgba(82,95,251,0.28);
-    }
-    .brand-img { display: none; height: 36px; width: auto; }
-    .pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1px solid rgba(82,95,251,0.14); background: rgba(82,95,251,0.08); color: var(--rk-blue);
-      white-space: nowrap;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: 1.3fr .9fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-    .card {
-      background: var(--rk-white);
-      border: 1px solid var(--rk-border);
-      border-radius: var(--rk-radius);
-      box-shadow: var(--rk-shadow-sm);
-      padding: 22px;
-    }
-    .hero-main h1 {
-      margin: 0 0 10px;
-      font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.04em;
-    }
-    .hero-main p {
-      margin: 0; font-size: 14px; line-height: 1.55; color: var(--rk-text-muted); font-weight: 500;
-      max-width: 760px;
-    }
-    .meta-grid {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px;
-    }
-    .meta-item {
-      padding: 14px; border: 1px solid var(--rk-border); border-radius: 16px; background: rgba(107,115,148,0.05);
-    }
-    .meta-item .label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--rk-text-muted); font-weight: 700; }
-    .meta-item .value { margin-top: 8px; font-size: 16px; font-weight: 700; }
-    .hero-side {
-      display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
-      background: linear-gradient(180deg, rgba(82,95,251,0.07), rgba(82,95,251,0.03));
-    }
-    .hero-side h2 {
-      margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: var(--rk-text-muted);
-    }
-    .hero-side ul {
-      margin: 0; padding-left: 18px; color: var(--rk-text); font-size: 13px; line-height: 1.55; font-weight: 500;
-      display: grid; gap: 6px;
-    }
-    .toolbar {
-      position: sticky; top: 12px; z-index: 30;
-      display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center;
-      background: rgba(242,245,250,.86); backdrop-filter: blur(12px);
-      border: 1px solid rgba(226,231,241,.8); border-radius: 22px; padding: 12px;
-      box-shadow: var(--rk-shadow-sm);
-    }
-    .toolbar-main {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center;
-    }
-    .field { display: flex; flex-direction: column; gap: 8px; }
-    .field label {
-      font-size: 12px; line-height: 1.3; font-weight: 600; color: var(--rk-text-muted);
-    }
-    select {
-      width: 100%; height: 46px; border: 1px solid #CBD4E5; border-radius: 16px; padding: 0 16px;
-      font-family: inherit; font-size: 14px; font-weight: 600; color: var(--rk-text); background: #fff; outline: none;
-    }
-    select:focus {
-      border-color: rgba(82,95,251,0.45); box-shadow: 0 0 0 4px rgba(82,95,251,0.09);
-    }
-    .segmented {
-      display: inline-flex; background: rgba(82,95,251,0.08); border: 1px solid rgba(82,95,251,0.14);
-      border-radius: 999px; padding: 4px; gap: 4px;
-    }
-    .segmented button {
-      border: 0; background: transparent; color: var(--rk-text-muted); font-family: inherit; font-size: 13px;
-      font-weight: 700; padding: 10px 14px; border-radius: 999px; cursor: pointer; transition: .2s ease;
-    }
-    .segmented button.active { background: var(--rk-blue); color: #fff; box-shadow: 0 8px 18px rgba(82,95,251,0.28); }
-    .switch {
-      display: inline-flex; align-items: center; gap: 10px; padding: 0 4px; cursor: pointer; user-select: none;
-      font-size: 13px; font-weight: 600; color: var(--rk-text);
-    }
-    .switch input { display:none; }
-    .switch-ui {
-      width: 48px; height: 28px; background: #DDE5F3; border-radius: 999px; position: relative; transition: .2s ease;
-    }
-    .switch-ui::after {
-      content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff;
-      box-shadow: 0 2px 6px rgba(29, 37, 74, 0.18); transition: .2s ease;
-    }
-    .switch input:checked + .switch-ui { background: rgba(82,95,251,0.5); }
-    .switch input:checked + .switch-ui::after { transform: translateX(20px); }
-    .summary-grid {
-      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
-    }
-    .summary-card {
-      padding: 16px; border-radius: 18px; border: 1px solid var(--rk-border); background: var(--rk-white); box-shadow: var(--rk-shadow-sm);
-    }
-    .summary-card .label { font-size: 12px; color: var(--rk-text-muted); font-weight: 600; }
-    .summary-card .value { margin-top: 6px; font-size: 24px; line-height: 1.1; font-weight: 700; letter-spacing: -0.03em; }
-    .summary-card .hint { margin-top: 8px; font-size: 12px; line-height: 1.45; color: var(--rk-text-muted); }
-    .summary-card.good { background: var(--rk-success-bg); border-color: rgba(13,159,110,0.24); }
-    .summary-card.warn { background: var(--rk-warning-bg); border-color: rgba(199,131,19,0.24); }
-    .summary-card.bad { background: var(--rk-danger-bg); border-color: rgba(217,53,71,0.2); }
-    .compare-layout {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
-      align-items: start;
-    }
-    .compare-card {
-      background: var(--rk-white); border: 1px solid var(--rk-border); border-radius: var(--rk-radius);
-      box-shadow: var(--rk-shadow-sm); overflow: hidden;
-    }
-    .compare-head {
-      padding: 20px 22px; border-bottom: 1px solid var(--rk-border);
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    }
-    .compare-head.robokassa { background: linear-gradient(180deg, rgba(82,95,251,0.10), rgba(82,95,251,0.04)); }
-    .compare-head h3 { margin: 0; font-size: 22px; letter-spacing: -0.03em; }
-    .badge {
-      display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 8px 12px;
-      font-size: 11px; line-height: 1; text-transform: uppercase; letter-spacing: .08em; font-weight: 700;
-      border: 1px solid var(--rk-border); color: var(--rk-text-muted); background: rgba(107,115,148,0.06);
-    }
-    .badge.primary { color: var(--rk-blue); border-color: rgba(82,95,251,0.18); background: rgba(82,95,251,0.08); }
-    .compare-body { padding: 20px 22px; }
-    .section-card + .section-card { margin-top: 16px; }
-    .section-card {
-      border: 1px solid var(--rk-border); border-radius: 18px; overflow: hidden; background: #fff;
-    }
-    .section-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 16px 18px; background: rgba(107,115,148,0.04); border-bottom: 1px solid var(--rk-border);
-    }
-    .section-head h4 {
-      margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: var(--rk-text-muted);
-    }
-    .rows { display: grid; }
-    .row {
-      display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: start;
-      padding: 16px 18px; border-bottom: 1px solid var(--rk-border);
-    }
-    .row:last-child { border-bottom: 0; }
-    .param {
-      font-size: 13px; line-height: 1.45; font-weight: 700; color: var(--rk-text);
-    }
-    .value-box {
-      display: flex; align-items: flex-start; gap: 10px; min-width: 0;
-    }
-    .icon {
-      flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;
-      margin-top: 1px;
-    }
-    .status-available .icon { color: var(--rk-success); background: rgba(13,159,110,0.10); }
-    .status-unavailable .icon { color: var(--rk-danger); background: rgba(217,53,71,0.10); }
-    .status-limited .icon, .status-soon .icon { color: var(--rk-warning); background: rgba(199,131,19,0.12); }
-    .status-neutral .icon { color: var(--rk-blue); background: rgba(82,95,251,0.10); }
-    .value-main {
-      font-size: 13px; line-height: 1.5; font-weight: 600; color: var(--rk-text);
-      word-break: break-word;
-    }
-    .value-note {
-      margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--rk-text-muted);
-    }
-    .legend {
-      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-      font-size: 12px; color: var(--rk-text-muted); font-weight: 600;
-    }
-    .legend-item {
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .legend-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
-    .dot-good { background: var(--rk-success); }
-    .dot-bad { background: var(--rk-danger); }
-    .dot-warn { background: var(--rk-warning); }
-    .dot-info { background: var(--rk-blue); }
-    .footer-note {
-      font-size: 12px; line-height: 1.5; color: var(--rk-text-muted); text-align: center; padding: 4px 0 0;
-    }
-    .hidden-row { display: none !important; }
-    @media (max-width: 1080px) {
-      .hero { grid-template-columns: 1fr; }
-      .toolbar { grid-template-columns: 1fr; }
-      .toolbar-main { grid-template-columns: 1fr; }
-      .compare-layout { grid-template-columns: 1fr; }
-      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 720px) {
-      body { padding: 18px 14px 32px; }
-      .page { gap: 14px; }
-      .card, .compare-card { border-radius: 18px; }
-      .brand-row { align-items: flex-start; flex-direction: column; }
-      .hero-main h1 { font-size: 28px; }
-      .meta-grid, .summary-grid { grid-template-columns: 1fr; }
-      .compare-head { flex-direction: column; align-items: flex-start; }
-      .row { grid-template-columns: 1fr; gap: 10px; }
-      .segmented { width: 100%; }
-      .segmented button { flex: 1; }
-    }
-  </style>
+  <!--
+    Favicon: положи v-rk-32.png рядом с этим файлом.
+    Если файла нет — просто убери строку ниже.
+  -->
+  <link rel="icon" type="image/png" href="v-rk-32.png">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="page">
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+      ЛОГОТИП
+      ► Чтобы заменить логотип:
+          1. Положи новый файл рядом с index.html
+          2. Исправь srcset и src ниже
+      ► Если файлов логотипа нет — автоматически покажется
+        текстовый fallback «Robokassa» (через onerror)
+    ══════════════════════════════════════════════════════════════
+    -->
     <div class="brand-row">
-      <div class="brand-logo-wrap">
-        <img id="rkLogo" class="brand-img" src="logo_robokassa_black.png" alt="Robokassa">
-        <div id="rkFallback" class="brand-fallback">
-          <span class="brand-mark">R</span>
-          <span>Robokassa</span>
-        </div>
-      </div>
-      <div class="pill">Только для внутренних менеджеров</div>
+      <picture class="brand-picture">
+        <source media="(max-width: 768px)" srcset="icon_robokassa_black.png">
+        <img
+          class="brand-logo"
+          src="logo_robokassa_black.png"
+          alt="Robokassa"
+          onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';"
+        >
+      </picture>
+      <!-- Текстовый fallback на случай отсутствия файла логотипа -->
+      <span id="logo-fallback" class="logo-fallback" style="display:none">Robokassa</span>
     </div>
 
+    <!--
+    ══════════════════════════════════════════════════════════════
+      HERO
+      ► Заголовок и подзаголовок — меняй текст прямо здесь
+    ══════════════════════════════════════════════════════════════
+    -->
     <section class="hero">
-      <div class="card hero-main">
-        <h1>Robokassa VS конкуренты</h1>
-        <p>Адаптивный внутренний раздел для быстрых сравнений по функционалу, тарифам и сценариям оплаты. Слева всегда Robokassa, справа — выбранный конкурент. Есть режим «только отличия», чтобы менеджеру было проще быстро отрабатывать возражения в звонке или переписке.</p>
-        <div class="meta-grid">
-          <div class="meta-item">
-            <div class="label">Формат</div>
-            <div class="value">Сравнение 1 к 1</div>
-          </div>
-          <div class="meta-item">
-            <div class="label">Источник</div>
-            <div class="value">Актуальная внутренняя таблица</div>
-          </div>
-          <div class="meta-item">
-            <div class="label">Фокус</div>
-            <div class="value">Функционал и отличия</div>
-          </div>
-        </div>
-      </div>
-      <div class="card hero-side">
-        <div>
-          <h2>Как использовать</h2>
-          <ul>
-            <li>выберите конкурента справа;</li>
-            <li>переключите «только отличия», чтобы убрать шум;</li>
-            <li>используйте «сводку» сверху как короткий talking point;</li>
-            <li>ниже открывайте нужный блок: тарифы, pay-методы, BNPL, фискализация.</li>
-          </ul>
-        </div>
-        <div class="legend">
-          <span class="legend-item"><span class="legend-dot dot-good"></span>есть</span>
-          <span class="legend-item"><span class="legend-dot dot-bad"></span>нет</span>
-          <span class="legend-item"><span class="legend-dot dot-warn"></span>ограничения / скоро</span>
-          <span class="legend-item"><span class="legend-dot dot-info"></span>тариф / описание</span>
-        </div>
-      </div>
+      <h1>Сравнение с конкурентами</h1>
+      <p>Для менеджеров отдела продаж</p>
     </section>
 
-    <section class="toolbar">
-      <div class="toolbar-main">
-        <div class="field">
-          <label for="competitorSelect">Конкурент для сравнения</label>
-          <select id="competitorSelect"></select>
-        </div>
-        <div class="field">
-          <label>Режим отображения</label>
-          <div class="segmented" role="tablist" aria-label="Режим отображения">
-            <button type="button" class="active" data-view="sections">Секции</button>
-            <button type="button" data-view="compact">Компактно</button>
+    <!--
+    ══════════════════════════════════════════════════════════════
+      СЛУЖЕБНАЯ ПЛАШКА
+      ► Текст плашки можно менять прямо здесь
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div class="internal-badge">
+      <span class="internal-badge__icon">⚠</span>
+      Внутренний инструмент для менеджеров. Не для клиентской отправки.
+    </div>
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+      ПАНЕЛЬ УПРАВЛЕНИЯ
+      Dropdown конкурентов заполняется из data.js автоматически.
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div class="card controls-card">
+      <div class="controls-row">
+
+        <!-- Выбор конкурента -->
+        <div class="control-group">
+          <label class="control-label" for="competitor-select">Сравнить с</label>
+          <div class="select-wrap">
+            <select id="competitor-select" class="competitor-select">
+              <!-- Заполняется из script.js на основе providers[] в data.js -->
+            </select>
           </div>
         </div>
-      </div>
-      <label class="switch">
-        <input type="checkbox" id="diffToggle">
-        <span class="switch-ui"></span>
-        <span>Показывать только отличия</span>
-      </label>
-      <div class="badge">внутренний режим</div>
-    </section>
 
-    <section class="summary-grid" id="summaryGrid"></section>
-
-    <section class="compare-layout">
-      <div class="compare-card">
-        <div class="compare-head robokassa">
-          <div>
-            <h3>Robokassa</h3>
-            <div class="value-note">Фиксированная левая колонка</div>
+        <!-- Режим отображения -->
+        <div class="control-group">
+          <label class="control-label">Режим</label>
+          <div class="switcher" role="group" aria-label="Режим отображения">
+            <button type="button" id="btn-all" class="active">Все параметры</button>
+            <button type="button" id="btn-diff">Только отличия</button>
           </div>
-          <span class="badge primary">базовое сравнение</span>
         </div>
-        <div class="compare-body" id="leftColumn"></div>
+
+        <!-- Счётчик отличий (показывается только в режиме «Только отличия») -->
+        <div class="diff-counter" id="diff-counter" aria-live="polite">
+          Найдено отличий:
+          <span class="diff-counter__num" id="diff-counter-num">0</span>
+        </div>
+
       </div>
+    </div>
 
-      <div class="compare-card">
-        <div class="compare-head">
-          <div>
-            <h3 id="rightTitle">Конкурент</h3>
-            <div class="value-note">Правая колонка меняется по выбору</div>
-          </div>
-          <span class="badge" id="rightBadge">выбранный сервис</span>
-        </div>
-        <div class="compare-body" id="rightColumn"></div>
+    <!--
+    ══════════════════════════════════════════════════════════════
+      STICKY-ШАПКА КОЛОНОК
+      Обновляется script.js при смене конкурента.
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div class="compare-sticky-header">
+      <div class="csh-label">Параметр</div>
+      <div class="csh-col">
+        <span class="csh-name" id="header-primary">Robokassa</span>
+        <span class="csh-tag csh-tag--primary">Ваш продукт</span>
       </div>
-    </section>
+      <div class="csh-col">
+        <span class="csh-name" id="header-competitor">—</span>
+        <span class="csh-tag csh-tag--competitor">Конкурент</span>
+      </div>
+    </div>
 
-    <div class="footer-note">Макет сделан в стиле предыдущего калькулятора: те же базовые цвета, карточки, скругления и общая логика интерфейса.</div>
-  </div>
+    <!--
+    ══════════════════════════════════════════════════════════════
+      КЛЮЧЕВЫЕ ОТЛИЧИЯ
+      Рендерится из script.js. Данные — в highlights[] конкурента в data.js.
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div id="highlights-area"></div>
 
-  <script>
-    const DATA = {"competitors": ["Ю kassa", "prodamus", "Cloud Payments", "GETCOURSE", "Т БАНК"], "robokassa": "robokassa", "sections": [{"title": "Тарифы и базовые ставки", "items": [{"param": "РФ карты", "robokassa": "3,7% мин 2,93%", "Ю kassa": "3,5% мин. 2,8%", "prodamus": "3,5% мин. 2,9%", "Cloud Payments": "3,8% мин. 3,4%", "GETCOURSE": "4,27% мин 3,05%", "Т БАНК": "2,99-3,64% / 2,49-3,03%"}, {"param": "Инокарты", "robokassa": "9,9% мин. 3,4%", "Ю kassa": "10%", "prodamus": "10%", "Cloud Payments": "4%", "GETCOURSE": "11% (13,42%)", "Т БАНК": "—"}, {"param": "СБП", "robokassa": "0,4-0,7%", "Ю kassa": "0,49-0,85%", "prodamus": "1,7%", "Cloud Payments": "0,4-0,7%", "GETCOURSE": "от 2,7%", "Т БАНК": "—"}]}, {"title": "Pay-методы", "items": [{"param": "MirPay", "robokassa": "+", "Ю kassa": "+", "prodamus": "+", "Cloud Payments": "+", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "SberPay", "robokassa": "+", "Ю kassa": "+", "prodamus": "+", "Cloud Payments": "+", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "T-Pay", "robokassa": "+", "Ю kassa": "+", "prodamus": "+", "Cloud Payments": "+", "GETCOURSE": "3,8%", "Т БАНК": "+"}, {"param": "MTCpay", "robokassa": "+", "Ю kassa": "—", "prodamus": "—", "Cloud Payments": "+", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "AlfaPay", "robokassa": "+", "Ю kassa": "—", "prodamus": "—", "Cloud Payments": "+", "GETCOURSE": "0,3%", "Т БАНК": "—"}, {"param": "Gazprom Pay", "robokassa": "Скоро", "Ю kassa": "—", "prodamus": "—", "Cloud Payments": "+", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Yandex Pay", "robokassa": "+", "Ю kassa": "+", "prodamus": "—", "Cloud Payments": "+", "GETCOURSE": "1,9%", "Т БАНК": "—"}, {"param": "Yandex Сплит", "robokassa": "—", "Ю kassa": "+", "prodamus": "—", "Cloud Payments": "—", "GETCOURSE": "—", "Т БАНК": "—"}]}, {"title": "BNPL, рассрочка и кредит", "items": [{"param": "BNPL", "robokassa": "—", "Ю kassa": "(+) Долями до 200 000", "prodamus": "—", "Cloud Payments": "(+) Долями до 200 000", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Mokka", "robokassa": "(+)", "Ю kassa": "—", "prodamus": "—", "Cloud Payments": "—", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Рассрочка", "robokassa": "(+) ОТП", "Ю kassa": "(+) Покупай со Сбером", "prodamus": "(+) Частями от Сбер до 150 000 Р, Т-Банк Кредит, ОТП, Директ Кредит, Фреш кредит, Долями +, ПроОнлайн (для КЗ, Кыргыз, Беларуси)", "Cloud Payments": "(+) Т-Банк Кредит", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Кредит", "robokassa": "(+) ОТП", "Ю kassa": "(+) Покупай со Сбером", "prodamus": "(+) Т-Банк Кредит", "Cloud Payments": "(+) Т-Банк Кредит", "GETCOURSE": "—", "Т БАНК": "—"}]}, {"title": "Сценарии оплаты", "items": [{"param": "Холд", "robokassa": "(+)", "Ю kassa": "(+)", "prodamus": "-", "Cloud Payments": "(+)", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Реккуренты", "robokassa": "(+)", "Ю kassa": "(+)", "prodamus": "(+)", "Cloud Payments": "(+)", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Привязка карты", "robokassa": "(+)", "Ю kassa": "-", "prodamus": "-", "Cloud Payments": "(+)", "GETCOURSE": "—", "Т БАНК": "—"}]}, {"title": "Фискализация и работа с бизнесом", "items": [{"param": "Работа с СМЗ", "robokassa": "(+)", "Ю kassa": "(+)", "prodamus": "(+)", "Cloud Payments": "-", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Чеки по 54-ФЗ", "robokassa": "(+) Робочеки", "Ю kassa": "(+) Чеки от ЮKassa (идет как доп. комиссия поверх тарифа)", "prodamus": "-", "Cloud Payments": "(+) Cloud-чеки (+1,5% поверх операции + 1500 в год)", "GETCOURSE": "—", "Т БАНК": "—"}, {"param": "Чеки для СМЗ", "robokassa": "(+)", "Ю kassa": "(+)", "prodamus": "(+)", "Cloud Payments": "(+)", "GETCOURSE": "—", "Т БАНК": "—"}]}]};
+    <!--
+    ══════════════════════════════════════════════════════════════
+      СЕКЦИИ СРАВНЕНИЯ
+      Рендерятся из script.js. Данные — sections[] и providers[] в data.js.
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div id="comparison-area"></div>
 
-    const state = {
-      competitor: DATA.competitors[0],
-      onlyDiff: false,
-      view: 'sections'
-    };
+  </div><!-- /.page -->
 
-    const competitorSelect = document.getElementById('competitorSelect');
-    const diffToggle = document.getElementById('diffToggle');
-    const leftColumn = document.getElementById('leftColumn');
-    const rightColumn = document.getElementById('rightColumn');
-    const rightTitle = document.getElementById('rightTitle');
-    const rightBadge = document.getElementById('rightBadge');
-    const summaryGrid = document.getElementById('summaryGrid');
-
-    function normalize(value) {
-      return String(value || '—').replace(/\s+/g, ' ').trim();
-    }
-
-    function classify(value, isRateRow = false) {
-      const v = normalize(value).toLowerCase();
-      if (isRateRow) return 'neutral';
-      if (!v || v === '-' || v === '—') return 'unavailable';
-      if (v.includes('скоро')) return 'soon';
-      if (v === '+' || v === '(+)' || v.startsWith('(+')) return 'available';
-      if (v.includes('+') || v.includes('робочеки') || v.includes('чеки') || v.includes('кредит') || v.includes('долями') || v.includes('покупай') || v.includes('otp') || v.includes('мокка')) return 'limited';
-      return 'limited';
-    }
-
-    function iconFor(status) {
-      if (status === 'available') return '✓';
-      if (status === 'unavailable') return '—';
-      if (status === 'soon') return '↗';
-      if (status === 'neutral') return '₽';
-      return '•';
-    }
-
-    function isRateRow(param) {
-      return ['РФ карты','Инокарты','СБП'].includes(param);
-    }
-
-    function humanizeValue(value, param) {
-      const clean = normalize(value);
-      if ((clean === '+' || clean === '(+)') && !isRateRow(param)) return 'Доступно';
-      if (clean === '-' || clean === '—') return 'Не указано / недоступно';
-      return clean;
-    }
-
-    function sameMeaning(a, b) {
-      return normalize(a).toLowerCase() === normalize(b).toLowerCase();
-    }
-
-    function buildValueBox(value, param) {
-      const status = classify(value, isRateRow(param));
-      const main = humanizeValue(value, param);
-      const wrap = document.createElement('div');
-      wrap.className = `value-box status-${status}`;
-
-      const icon = document.createElement('span');
-      icon.className = 'icon';
-      icon.textContent = iconFor(status);
-
-      const textWrap = document.createElement('div');
-      const mainEl = document.createElement('div');
-      mainEl.className = 'value-main';
-      mainEl.textContent = main;
-
-      textWrap.appendChild(mainEl);
-      wrap.append(icon, textWrap);
-      return wrap;
-    }
-
-    function renderSections(target, sideKey) {
-      target.innerHTML = '';
-      DATA.sections.forEach((section) => {
-        const sectionCard = document.createElement('div');
-        sectionCard.className = 'section-card';
-
-        const head = document.createElement('div');
-        head.className = 'section-head';
-
-        const title = document.createElement('h4');
-        title.textContent = section.title;
-
-        const count = document.createElement('div');
-        count.className = 'value-note';
-        count.textContent = `${section.items.length} параметра`;
-
-        head.append(title, count);
-
-        const rows = document.createElement('div');
-        rows.className = 'rows';
-
-        section.items.forEach((item) => {
-          const baseVal = item[DATA.robokassa];
-          const compVal = item[state.competitor];
-          const currentVal = sideKey === DATA.robokassa ? baseVal : compVal;
-          const hidden = state.onlyDiff && sameMeaning(baseVal, compVal);
-
-          const row = document.createElement('div');
-          row.className = 'row' + (hidden ? ' hidden-row' : '');
-          row.dataset.same = hidden ? '1' : '0';
-
-          const param = document.createElement('div');
-          param.className = 'param';
-          param.textContent = item.param;
-
-          row.append(param, buildValueBox(currentVal, item.param));
-          rows.appendChild(row);
-        });
-
-        sectionCard.append(head, rows);
-        target.appendChild(sectionCard);
-      });
-    }
-
-    function renderCompact(target, sideKey) {
-      target.innerHTML = '';
-      const flat = DATA.sections.flatMap(section => section.items.map(item => ({section: section.title, item})));
-      const sectionCard = document.createElement('div');
-      sectionCard.className = 'section-card';
-
-      const head = document.createElement('div');
-      head.className = 'section-head';
-      const title = document.createElement('h4');
-      title.textContent = 'Все параметры';
-      const count = document.createElement('div');
-      count.className = 'value-note';
-      count.textContent = `${flat.length} строк`;
-      head.append(title, count);
-
-      const rows = document.createElement('div');
-      rows.className = 'rows';
-
-      flat.forEach((entry) => {
-        const item = entry.item;
-        const baseVal = item[DATA.robokassa];
-        const compVal = item[state.competitor];
-        const currentVal = sideKey === DATA.robokassa ? baseVal : compVal;
-        const hidden = state.onlyDiff && sameMeaning(baseVal, compVal);
-
-        const row = document.createElement('div');
-        row.className = 'row' + (hidden ? ' hidden-row' : '');
-
-        const param = document.createElement('div');
-        param.className = 'param';
-        param.innerHTML = `${item.param}<div class="value-note">${entry.section}</div>`;
-
-        row.append(param, buildValueBox(currentVal, item.param));
-        rows.appendChild(row);
-      });
-
-      sectionCard.append(head, rows);
-      target.appendChild(sectionCard);
-    }
-
-    function buildSummary() {
-      const items = DATA.sections.flatMap(s => s.items);
-      let sameCount = 0;
-      let roboWins = 0;
-      let compWins = 0;
-      let rates = 0;
-
-      items.forEach((item) => {
-        const robo = normalize(item[DATA.robokassa]);
-        const comp = normalize(item[state.competitor]);
-        if (sameMeaning(robo, comp)) {
-          sameCount += 1;
-          return;
-        }
-        if (isRateRow(item.param)) {
-          rates += 1;
-          return;
-        }
-        const rs = classify(robo, false);
-        const cs = classify(comp, false);
-        const score = (s) => s === 'available' ? 3 : s === 'limited' ? 2 : s === 'soon' ? 1 : 0;
-        if (score(rs) > score(cs)) roboWins += 1;
-        else if (score(cs) > score(rs)) compWins += 1;
-      });
-
-      const total = items.length;
-      summaryGrid.innerHTML = `
-        <div class="summary-card good">
-          <div class="label">Преимущества Robokassa</div>
-          <div class="value">${roboWins}</div>
-          <div class="hint">Параметры, где Robokassa выглядит сильнее по функционалу.</div>
-        </div>
-        <div class="summary-card bad">
-          <div class="label">Сильные стороны конкурента</div>
-          <div class="value">${compWins}</div>
-          <div class="hint">Параметры, где конкурент покрывает сценарий лучше или шире.</div>
-        </div>
-        <div class="summary-card">
-          <div class="label">Совпадения</div>
-          <div class="value">${sameCount}</div>
-          <div class="hint">Параметры, где различий почти нет и их можно скрыть.</div>
-        </div>
-        <div class="summary-card warn">
-          <div class="label">Тарифные строки</div>
-          <div class="value">${rates}</div>
-          <div class="hint">Строки со ставками и комиссиями, которые лучше обсуждать отдельно.</div>
-        </div>
-      `;
-    }
-
-    function render() {
-      rightTitle.textContent = state.competitor;
-      rightBadge.textContent = state.competitor;
-
-      if (state.view === 'sections') {
-        renderSections(leftColumn, DATA.robokassa);
-        renderSections(rightColumn, state.competitor);
-      } else {
-        renderCompact(leftColumn, DATA.robokassa);
-        renderCompact(rightColumn, state.competitor);
-      }
-
-      buildSummary();
-    }
-
-    function initLogoFallback() {
-      const img = document.getElementById('rkLogo');
-      const fallback = document.getElementById('rkFallback');
-      img.addEventListener('load', () => {
-        img.style.display = 'block';
-        fallback.style.display = 'none';
-      });
-      img.addEventListener('error', () => {
-        img.style.display = 'none';
-        fallback.style.display = 'inline-flex';
-      });
-    }
-
-    DATA.competitors.forEach((name) => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      competitorSelect.appendChild(opt);
-    });
-    competitorSelect.value = state.competitor;
-
-    competitorSelect.addEventListener('change', (e) => {
-      state.competitor = e.target.value;
-      render();
-    });
-
-    diffToggle.addEventListener('change', (e) => {
-      state.onlyDiff = e.target.checked;
-      render();
-    });
-
-    document.querySelectorAll('.segmented button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.segmented button').forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.view = btn.dataset.view;
-        render();
-      });
-    });
-
-    initLogoFallback();
-    render();
-  </script>
+  <!--
+    Порядок важен: сначала data.js (данные), потом script.js (логика).
+  -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
