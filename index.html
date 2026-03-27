@@ -248,7 +248,7 @@ const sections = [
 // @@PROVIDERS_START@@
 const providers = [
   {
-    id:"robokassa", name:"Robokassa", isPrimary:true,
+    id:"robokassa", name:"Робокасса", isPrimary:true,
     highlights:[],
     params:{
       rf_cards: {v:"3,7% мин 2,9%"},
@@ -279,8 +279,8 @@ const providers = [
     },
   },
   {
-    id:"yookassa", name:"ЮКасса", isPrimary:false,
-    highlights:["Фискализация платная: доп. комиссия поверх тарифа (зависит от оборота); у Robokassa включена", "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa", "Привязка карты и Чеки для СМЗ — есть у Robokassa, у ЮКасса отсутствуют", "СБП у ЮКасса дороже и с лимитом 700 000 ₽; у Robokassa лимит 1 млн ₽"],
+    id:"юкасса", name:"Ю.касса", isPrimary:false,
+    highlights:[],
     params:{
       rf_cards: {v:"3,5% мин. 2,8%"},
       foreign_cards: {v:"0.04"},
@@ -1113,37 +1113,6 @@ const providers = [
       third_kassa: {v:"partner", note:"CloudKassir OrangeData Business Kassa АТОЛ Онлайн Kit Online Digitalkassa"},
       payout: {v:"Автоматический ежедневный вывод"},
       crm_cms: {v:"partner", note:"Ссылка"},
-    },
-  },
-  {
-    id:"russtandart", name:"Русский стандарт", isPrimary:false,
-    highlights:["Тарифы на сайте не опубликованы — только по запросу", "Из pay-методов только MirPay; остальные не поддерживаются", "Нет BNPL, рассрочки, работы с СМЗ, фискализации 54-ФЗ"],
-    params:{
-      rf_cards: {v:"unknown"},
-      foreign_cards: {v:"unknown"},
-      sbp: {v:"unknown"},
-      pay_methods: {v:"unknown"},
-      mirpay: {v:"unknown"},
-      sberpay: {v:"unknown"},
-      tpay: {v:"unknown"},
-      mtcpay: {v:"unknown"},
-      alfapay: {v:"unknown"},
-      gazprompay: {v:"unknown"},
-      yandexpay: {v:"unknown"},
-      yandex_split: {v:"unknown"},
-      bnpl: {v:"unknown"},
-      installment: {v:"unknown"},
-      credit: {v:"unknown"},
-      hold: {v:"unknown"},
-      recurrents: {v:"unknown"},
-      card_binding: {v:"unknown"},
-      smz: {v:"unknown"},
-      fiscal_54fz: {v:"unknown"},
-      fiscal_smz: {v:"unknown"},
-      own_kassa: {v:"unknown"},
-      third_kassa: {v:"unknown"},
-      payout: {v:"unknown"},
-      crm_cms: {v:"unknown"},
     },
   },
 ];
