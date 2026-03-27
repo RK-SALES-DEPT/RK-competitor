@@ -6,103 +6,1469 @@
   <title>Сравнение с конкурентами | Robokassa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="v-rk-32.png">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --blue:      #525FFB;
+      --bg:        #F2F5FA;
+      --white:     #FFFFFF;
+      --ok:        #0D9F6E;
+      --ok-bg:     #EAF8F2;
+      --no:        #D93547;
+      --no-bg:     #FFF1F3;
+      --amber:     #A06A00;
+      --amber-bg:  #FFF8E6;
+      --border:    #E2E7F1;
+      --border-s:  #EDF1F8;
+      --text:      #182033;
+      --muted:     #6B7394;
+      --r:         20px;
+      --r-sm:      14px;
+      --shadow:    0 10px 30px rgba(29,37,74,0.08);
+      --shadow-sm: 0 4px 14px rgba(29,37,74,0.06);
+      --font:      'Geologica', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); padding: 28px 20px 64px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .brand-row { display: flex; align-items: center; margin-bottom: 4px; }
+    .brand-logo { width: 168px; height: auto; display: block; }
+    .logo-fallback { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; display: none; }
+    .hero { text-align: center; }
+    .hero h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 5px; }
+    .hero p  { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .alert { display: flex; align-items: center; gap: 8px; padding: 9px 16px; background: rgba(217,53,71,0.05); border: 1px solid rgba(217,53,71,0.17); border-radius: var(--r-sm); font-size: 12px; font-weight: 600; color: var(--no); }
+    .brands { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .brand-card { border-radius: var(--r-sm); padding: 14px 18px; }
+    .brand-card--rk { background: var(--blue); }
+    .brand-card--rv { background: var(--white); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
+    .brand-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
+    .brand-card--rk .brand-eyebrow { color: rgba(255,255,255,0.65); }
+    .brand-card--rv .brand-eyebrow { color: var(--muted); }
+    .brand-name { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .brand-card--rk .brand-name { color: #fff; }
+    .brand-card--rv .brand-name { color: var(--text); }
+    .brand-tag { display: inline-block; margin-top: 5px; padding: 2px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+    .brand-card--rk .brand-tag { background: rgba(255,255,255,0.18); color: #fff; }
+    .brand-card--rv .brand-tag { background: rgba(107,115,148,0.1); color: var(--muted); }
+    .controls { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-sm); box-shadow: var(--shadow-sm); padding: 14px 18px; display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+    .ctrl-group { display: flex; flex-direction: column; gap: 5px; }
+    .ctrl-label { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+    .sel-wrap { position: relative; display: inline-block; }
+    .competitor-sel { height: 38px; min-width: 210px; border: 1px solid #CBD4E5; border-radius: 12px; padding: 0 36px 0 14px; font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--text); background: var(--white); cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; transition: border-color .15s, box-shadow .15s; }
+    .competitor-sel:focus { border-color: rgba(82,95,251,0.4); box-shadow: 0 0 0 3px rgba(82,95,251,0.09); }
+    .sel-wrap::after { content: ''; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); pointer-events: none; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--muted); }
+    .switcher { display: inline-flex; background: rgba(82,95,251,0.07); border: 1px solid rgba(82,95,251,0.14); border-radius: 999px; padding: 3px; gap: 3px; }
+    .sw-btn { border: 0; background: transparent; font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; transition: .15s; white-space: nowrap; }
+    .sw-btn.on { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(82,95,251,0.28); }
+    .diff-counter { display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); align-self: center; }
+    .diff-counter.vis { display: flex; }
+    .diff-n { min-width: 24px; height: 24px; padding: 0 7px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(82,95,251,0.1); color: var(--blue); font-size: 12px; font-weight: 700; }
+    .col-header { position: sticky; top: 10px; z-index: 40; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-sm); box-shadow: var(--shadow); display: grid; grid-template-columns: 2fr 1.4fr 1.4fr; }
+    .ch-cell { padding: 11px 18px; display: flex; flex-direction: column; gap: 2px; }
+    .ch-cell:not(:first-child) { border-left: 1px solid var(--border-s); }
+    .ch-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); opacity: 0.75; }
+    .ch-name { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .ch-tag { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; width: fit-content; margin-top: 2px; }
+    .ch-tag--p { background: rgba(82,95,251,0.09); color: var(--blue); }
+    .ch-tag--r { background: rgba(107,115,148,0.09); color: var(--muted); }
+    .highlights { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 0 var(--r-sm) var(--r-sm) 0; box-shadow: var(--shadow-sm); padding: 14px 18px; }
+    .hl-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+    .hl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 5px; }
+    .hl-item:last-child { margin-bottom: 0; }
+    .hl-dot { width: 5px; min-width: 5px; height: 5px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+    .section { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .section-head { padding: 9px 20px; border-bottom: 1px solid var(--border-s); display: flex; align-items: center; gap: 8px; background: rgba(107,115,148,0.03); }
+    .section-line { width: 3px; height: 13px; border-radius: 2px; background: var(--blue); opacity: 0.38; flex-shrink: 0; }
+    .section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+    .param-row { display: grid; grid-template-columns: 2fr 1.4fr 1.4fr; border-top: 1px solid var(--border-s); transition: background .1s; }
+    .param-row:hover { background: rgba(82,95,251,0.016); }
+    .param-row.diff { background: rgba(82,95,251,0.012); }
+    .param-row.diff:hover { background: rgba(82,95,251,0.028); }
+    .param-row.hidden { display: none; }
+    .p-label { padding: 10px 20px; font-size: 12px; font-weight: 500; color: var(--muted); line-height: 1.4; display: flex; align-items: center; }
+    .param-row.diff .p-label { color: var(--text); font-weight: 600; }
+    .p-cell { padding: 9px 14px 9px 16px; border-left: 1px solid var(--border-s); display: flex; flex-direction: column; gap: 3px; justify-content: center; }
+    .p-cell--rk { background: rgba(82,95,251,0.028); border-left-color: rgba(82,95,251,0.12); }
+    .p-note { font-size: 10px; color: var(--muted); line-height: 1.35; max-width: 180px; }
+    .no-diff-notice { padding: 12px 20px; font-size: 11px; color: var(--muted); font-style: italic; text-align: center; border-top: 1px solid var(--border-s); }
+    .chip { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .chip i { font-style: normal; font-size: 9px; }
+    .chip-yes  { background: var(--ok-bg);    color: var(--ok); }
+    .chip-no   { background: var(--no-bg);    color: var(--no); }
+    .chip-par  { background: var(--amber-bg); color: var(--amber); }
+    .chip-ptn  { background: rgba(82,95,251,0.08);   color: var(--blue); }
+    .chip-req  { background: rgba(107,115,148,0.08); color: var(--muted); }
+    .chip-soon { background: rgba(107,115,148,0.08); color: var(--muted); }
+    .val-text  { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.35; }
+    .val-unk   { font-size: 11px; color: var(--muted); opacity: 0.65; }
+    @media (max-width: 860px) { .col-header, .param-row { grid-template-columns: 1.6fr 1.2fr 1.2fr; } }
+    @media (max-width: 768px) { body { padding: 20px 14px 52px; } .brand-logo { width: 32px; } .hero h1 { font-size: 22px; } .ch-tag { display: none; } }
+    @media (max-width: 580px) { .col-header, .param-row { grid-template-columns: 1.1fr 1fr 1fr; } .col-header { position: static; } .ch-eyebrow { display: none; } .ch-name { font-size: 12px; } .p-label { font-size: 11px; padding: 9px 12px; } .p-cell { padding: 8px 10px; } .chip { font-size: 10px; padding: 2px 7px; } .val-text { font-size: 11px; } }
+  </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- ─── ЛОГОТИП ───────────────────────────────────────────────────
-    Чтобы заменить: положи новые файлы рядом и исправь src/srcset.
-    Если файла нет — автоматически появится текст «Robokassa».
-  ──────────────────────────────────────────────────────────────── -->
+  <!-- ЛОГОТИП — заменить: положи новые файлы рядом и исправь src/srcset -->
   <div class="brand-row">
-    <picture class="brand-picture">
+    <picture>
       <source media="(max-width: 768px)" srcset="icon_robokassa_black.png">
       <img class="brand-logo" src="logo_robokassa_black.png" alt="Robokassa"
            onerror="this.style.display='none';document.getElementById('logo-fb').style.display='block'">
     </picture>
-    <span id="logo-fb" class="logo-fallback" style="display:none">Robokassa</span>
+    <span id="logo-fb" class="logo-fallback">Robokassa</span>
   </div>
 
-  <!-- ─── ЗАГОЛОВОК ─────────────────────────────────────────────────
-    Текст меняй прямо здесь.
-  ──────────────────────────────────────────────────────────────── -->
-  <section class="hero">
+  <div class="hero">
     <h1>Сравнение с конкурентами</h1>
     <p>Инструмент отдела продаж</p>
-  </section>
+  </div>
 
-  <!-- ─── СЛУЖЕБНАЯ ПЛАШКА ──────────────────────────────────────────
-    Текст меняй прямо здесь.
-  ──────────────────────────────────────────────────────────────── -->
-  <div class="internal-badge">
-    <span class="internal-badge__icon">⚠</span>
+  <div class="alert">
+    <span>⚠</span>
     Внутренний инструмент для менеджеров. Не для клиентской отправки.
   </div>
 
-  <!-- ─── ПАНЕЛЬ УПРАВЛЕНИЯ ──────────────────────────────────────────
-    Dropdown заполняется из data.js (providers[]) автоматически.
-  ──────────────────────────────────────────────────────────────── -->
-  <div class="card controls-card">
-    <div class="controls-row">
-
-      <div class="control-group">
-        <label class="control-label" for="competitor-select">Сравнить с</label>
-        <div class="select-wrap">
-          <select id="competitor-select" class="competitor-select">
-            <!-- заполняется script.js -->
-          </select>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label">Режим отображения</label>
-        <div class="switcher">
-          <button type="button" id="btn-all" class="active">Все параметры</button>
-          <button type="button" id="btn-diff">Только отличия</button>
-        </div>
-      </div>
-
-      <div class="diff-counter" id="diff-counter">
-        Отличий: <span class="diff-counter__num" id="diff-counter-num">0</span>
-      </div>
-
+  <div class="brands">
+    <div class="brand-card brand-card--rk">
+      <div class="brand-eyebrow">Ваш продукт</div>
+      <div class="brand-name">Robokassa</div>
+      <span class="brand-tag">Рекомендуем</span>
+    </div>
+    <div class="brand-card brand-card--rv">
+      <div class="brand-eyebrow">Конкурент</div>
+      <div class="brand-name" id="rival-name">—</div>
+      <span class="brand-tag">Сравниваем</span>
     </div>
   </div>
 
-  <!-- ─── STICKY-ШАПКА КОЛОНОК ───────────────────────────────────── -->
-  <div class="compare-header">
-    <div class="ch-cell">
-      <span class="ch-eyebrow">Параметр</span>
+  <div class="controls">
+    <div class="ctrl-group">
+      <label class="ctrl-label" for="rival-sel">Сравнить с</label>
+      <div class="sel-wrap">
+        <select id="rival-sel" class="competitor-sel"></select>
+      </div>
     </div>
+    <div class="ctrl-group">
+      <label class="ctrl-label">Режим</label>
+      <div class="switcher">
+        <button class="sw-btn on" id="btn-all">Все параметры</button>
+        <button class="sw-btn" id="btn-diff">Только отличия</button>
+      </div>
+    </div>
+    <div class="diff-counter" id="diff-counter">
+      Отличий: <span class="diff-n" id="diff-n">0</span>
+    </div>
+  </div>
+
+  <div class="col-header">
+    <div class="ch-cell"><span class="ch-eyebrow">Параметр</span></div>
     <div class="ch-cell">
       <span class="ch-eyebrow">Ваш продукт</span>
       <span class="ch-name">Robokassa</span>
-      <span class="ch-tag ch-tag--primary">Рекомендуем</span>
+      <span class="ch-tag ch-tag--p">Рекомендуем</span>
     </div>
     <div class="ch-cell">
       <span class="ch-eyebrow">Конкурент</span>
-      <span class="ch-name" id="ch-competitor-name">—</span>
-      <span class="ch-tag ch-tag--rival">Сравниваем</span>
+      <span class="ch-name" id="col-rival-name">—</span>
+      <span class="ch-tag ch-tag--r">Сравниваем</span>
     </div>
   </div>
 
-  <!-- ─── КЛЮЧЕВЫЕ ОТЛИЧИЯ ───────────────────────────────────────────
-    Рендерится из script.js. Данные — highlights[] в data.js.
-  ──────────────────────────────────────────────────────────────── -->
-  <div id="highlights-area"></div>
+  <div id="hl-area"></div>
+  <div id="cmp-area"></div>
 
-  <!-- ─── БЛОКИ СРАВНЕНИЯ ────────────────────────────────────────────
-    Рендерится из script.js. Данные — sections[] + providers[] в data.js.
-  ──────────────────────────────────────────────────────────────── -->
-  <div id="comparison-area"></div>
+</div>
+<script>
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║  ДАННЫЕ — редактировать только здесь                                 ║
+// ║                                                                       ║
+// ║  Типы значений (поле v):                                              ║
+// ║   "yes"  ✓ Есть   "no"  ✕ Нет   "partial" ≈ Частично               ║
+// ║   "partner" ↗ Через партнёра   "request" По запросу                 ║
+// ║   "soon" Скоро   "unknown" Нет данных   строка → текст               ║
+// ║  Поле note — необязательный комментарий под значением.               ║
+// ╚══════════════════════════════════════════════════════════════════════╝
 
-</div><!-- /.page -->
+const paramMeta = {
+  // Базовые условия
+  rf_cards:      "Карты РФ",
+  foreign_cards: "Иностранные карты",
+  sbp:           "СБП",
+  pay_methods:   "Pay-методы (комиссия)",
+  // Способы оплаты
+  mirpay:        "MirPay",
+  sberpay:       "SberPay",
+  tpay:          "T-Pay",
+  mtcpay:        "МТС Pay",
+  alfapay:       "Альфа Pay",
+  gazprompay:    "Газпром Pay",
+  yandexpay:     "Yandex Pay",
+  // Фискализация
+  fiscal_54fz:   "Чеки по 54-ФЗ",
+  fiscal_smz:    "Чеки для СМЗ",
+  // BNPL
+  yandex_split:  "Яндекс Сплит",
+  bnpl:          "BNPL (Долями / Подели)",
+  installment:   "Рассрочка",
+  credit:        "Кредит",
+  // Рекурренты
+  hold:          "Холдирование",
+  recurrents:    "Рекуррентные платежи",
+  card_binding:  "Привязка карты",
+  smz:           "Работа с СМЗ",
+  // Кассы и интеграции
+  own_kassa:     "Своя онлайн-касса",
+  third_kassa:   "Интеграция сторонней кассы",
+  payout:        "Вывод средств",
+  crm_cms:       "Интеграция с CRM / CMS",
+};
 
-<!-- Порядок важен: data.js раньше script.js -->
-<script src="data.js"></script>
-<script src="script.js"></script>
+// ── Секции и порядок параметров ──────────────────────────────────────────
+// Чтобы изменить порядок: переставь объекты или id внутри params[]
+const sections = [
+  { id:"tariffs",   title:"Базовые условия",           params:["rf_cards","foreign_cards","sbp","pay_methods"] },
+  { id:"payments",  title:"Способы оплаты",             params:["mirpay","sberpay","tpay","mtcpay","alfapay","gazprompay","yandexpay"] },
+  { id:"fiscal",    title:"Фискализация / 54-ФЗ",       params:["fiscal_54fz","fiscal_smz"] },
+  { id:"bnpl",      title:"BNPL / Рассрочка / Кредиты", params:["yandex_split","bnpl","installment","credit"] },
+  { id:"recur",     title:"Рекурренты / Холдирование",  params:["hold","recurrents","card_binding","smz"] },
+  { id:"kassa",     title:"Кассы / Интеграции / Вывод", params:["own_kassa","third_kassa","payout","crm_cms"] },
+];
+
+// ── Провайдеры ───────────────────────────────────────────────────────────
+// isPrimary: true → Robokassa, всегда слева. Не трогать.
+//
+// КАК ДОБАВИТЬ НОВОГО КОНКУРЕНТА:
+//  1. Скопируй один объект ниже (от { до конечной },)
+//  2. Заполни id, name, highlights[] и params{}
+//  3. Сохрани — конкурент появится в dropdown сам
+const providers = [
+
+  // ═══════════════════════════════════════════════════════
+  //  ROBOKASSA (первичный — не трогать isPrimary)
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"robokassa", name:"Robokassa", isPrimary:true, highlights:[],
+    params:{
+      rf_cards:      {v:"3,7% мин. 2,9%"},
+      foreign_cards: {v:"9,9%"},
+      sbp:           {v:"от 2,7% мин. 1,8%", note:"Лимит 1 млн ₽"},
+      pay_methods:   {v:"Как карты", note:"AlfaPay +0,3%, Yandex Pay +1,9%"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"yes"},
+      alfapay:       {v:"yes"},
+      gazprompay:    {v:"soon"},
+      yandexpay:     {v:"yes"},
+      fiscal_54fz:   {v:"yes", note:"Робочеки — включено в тариф"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"yes"},
+      bnpl:          {v:"yes", note:"Подели, Мокка"},
+      installment:   {v:"partner", note:"ОТП Банк"},
+      credit:        {v:"partner", note:"ОТП Банк"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"yes", note:"Robokassa Online"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Настраиваемый вывод"},
+      crm_cms:       {v:"yes", note:"Ссылка на все интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  ЮКасса
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"yookassa", name:"ЮКасса", isPrimary:false,
+    highlights:[
+      "Фискализация платная: доп. комиссия поверх тарифа (зависит от оборота); у Robokassa включена",
+      "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa",
+      "Привязка карты и Чеки для СМЗ — есть у Robokassa, у ЮКасса отсутствуют",
+      "СБП у ЮКасса дороже и с лимитом 700 000 ₽; у Robokassa лимит 1 млн ₽",
+    ],
+    params:{
+      rf_cards:      {v:"3,5% мин. 2,8%", note:"4,27% мин. 3,4% с НДС"},
+      foreign_cards: {v:"4%", note:"4,88% мин. 3,4% с НДС"},
+      sbp:           {v:"0,4–0,7%", note:"Лимит 700 000 ₽; 0,49–0,85% с НДС"},
+      pay_methods:   {v:"Как карты", note:"T-Pay +3,8%"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Чеки от ЮКасса — доп. комиссия поверх тарифа"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Плати Частями от Сбер до 150 000 ₽"},
+      installment:   {v:"partner", note:"Покупай со Сбером"},
+      credit:        {v:"partner", note:"Покупай со Сбером"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"partner", note:"КИТ Инвест"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Prodamus
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"prodamus", name:"Prodamus", isPrimary:false,
+    highlights:[
+      "Фискализация (54-ФЗ) — у Prodamus нет; у Robokassa включена в тариф",
+      "Холдирование, MirPay, МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay — только у Robokassa",
+      "СБП у Prodamus дороже: от 3,8% против от 1,8% у Robokassa",
+      "Prodamus специализируется на инфобизнесе — ограниченный набор инструментов",
+    ],
+    params:{
+      rf_cards:      {v:"3,8% мин. 2,9%"},
+      foreign_cards: {v:"10%"},
+      sbp:           {v:"от 3,8%", note:"Как карты"},
+      pay_methods:   {v:"+0,3% к картам"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"yes"},
+      bnpl:          {v:"partner", note:"Prodamus Частями от 3 500 ₽, Долями до 200 000 ₽, Плати Частями до 150 000 ₽"},
+      installment:   {v:"partner", note:"Т-Банк Кредит, ОТП, Директ Кредит, Фреш кредит, Долями+, ПроОнлайн"},
+      credit:        {v:"partner", note:"Т-Банк Кредит"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"yes", note:"Prodamus.Kassa"},
+      third_kassa:   {v:"yes", note:"OrangeData, БИФИТ Касса, Дримкас, МодульКасса"},
+      payout:        {v:"Авто, на 2-й день"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  CloudPayments
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"cloudpayments", name:"CloudPayments", isPrimary:false,
+    highlights:[
+      "Фискализация платная: +1,5% поверх операции + 1 500 ₽/год; у Robokassa включена",
+      "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa",
+      "Работа с СМЗ и Чеки для СМЗ — только у Robokassa",
+      "Комиссия по картам у CloudPayments ниже: 2,9% мин. 2,5%",
+    ],
+    params:{
+      rf_cards:      {v:"2,9% мин. 2,5%", note:"4,75% мин. 3,05% с НДС"},
+      foreign_cards: {v:"11%", note:"13,42% с НДС"},
+      sbp:           {v:"1,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Cloud-чеки: +1,5% поверх операции + 1 500 ₽/год"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Долями до 200 000 ₽"},
+      installment:   {v:"partner", note:"Т-Банк Кредит"},
+      credit:        {v:"partner", note:"Т-Банк Кредит"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"CloudKassir"},
+      third_kassa:   {v:"no"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  GetCourse
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"getcourse", name:"GetCourse", isPrimary:false,
+    highlights:[
+      "GetCourse — платформа для онлайн-курсов, не платёжный шлюз; CRM только внутри платформы",
+      "MirPay, МТС Pay, Газпром Pay — не поддерживаются",
+      "Холдирование и привязка карты — есть у Robokassa, у GetCourse нет",
+      "СБП дороже: от 3,5% против от 1,8% у Robokassa",
+    ],
+    params:{
+      rf_cards:      {v:"3,5% мин. 1,9%", note:"3,5% мин. 1,9% с НДС"},
+      foreign_cards: {v:"10%"},
+      sbp:           {v:"от 3,5%", note:"Как карты"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"yes"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"yes"},
+      fiscal_54fz:   {v:"yes"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"yes"},
+      bnpl:          {v:"partner", note:"Покупай со Сбером, Т-Банк, POSCREDIT"},
+      installment:   {v:"partner", note:"Покупай со Сбером, Т-Банк, POSCREDIT, Фреш, Ресурс Развития"},
+      credit:        {v:"partner", note:"Покупай со Сбером, Т-Банк, Фреш"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"request", note:"На уточнении"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"no", note:"Только внутри экосистемы GetCourse"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  PayKeeper
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"paykeeper", name:"PayKeeper", isPrimary:false,
+    highlights:[
+      "Агрегатор-посредник: итоговая ставка зависит от банка-эквайера — нет прозрачности тарифов",
+      "BNPL, рассрочка, кредит — полностью отсутствуют",
+      "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay — не поддерживаются",
+      "Нет фискализации по 54-ФЗ, нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"1,85–2,25%", note:"2,25–2,74% с НДС"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"unknown", note:"Зависит от банка-эквайера"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"unknown"},
+      tpay:          {v:"unknown"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"unknown"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"yes"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"PayKeeper Касса"},
+      third_kassa:   {v:"yes", note:"АТОЛ Онлайн, OrangeData, Kit Online, Business Kassa"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Т-Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"tbank", name:"Т-Банк", isPrimary:false,
+    highlights:[
+      "Монобанк: МТС Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — не подключены",
+      "Нет работы с СМЗ и Чеков для СМЗ",
+      "Фискализация платная: Т-чеки +1,5% поверх операции; у Robokassa включена в тариф",
+      "Нет иностранных карт",
+    ],
+    params:{
+      rf_cards:      {v:"2,99–3,64%", note:"2,49–3,03% при объёме"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"yes"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Т-чеки: +1,5% поверх операции"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Долями до 200 000 ₽"},
+      installment:   {v:"partner", note:"Т-Банк Кредит"},
+      credit:        {v:"partner", note:"Т-Банк Кредит"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"CloudKassir"},
+      third_kassa:   {v:"unknown"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Альфа-банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"alfabank", name:"Альфа-банк", isPrimary:false,
+    highlights:[
+      "Нет фискализации 54-ФЗ, рекуррентов, привязки карты, работы с СМЗ",
+      "Из pay-методов: только MirPay, SberPay, T-Pay, AlfaPay",
+      "МТС Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — не поддерживаются",
+      "BNPL только через Подели; нет рассрочки и кредита",
+    ],
+    params:{
+      rf_cards:      {v:"2,6–2,7%", note:"Мин. 5 ₽; 3,17–3,29% с НДС"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"yes"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Подели"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"no"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"PayKeeper Касса, CloudKassir, OrangeData, АТОЛ Онлайн, Life Pay"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Ozon банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"ozonbank", name:"Ozon банк", isPrimary:false,
+    highlights:[
+      "Заточен под Ozon: вывод средств только на р/с Ozon банка",
+      "Нет pay-методов, нет холдирования, нет BNPL",
+      "Минимальный набор функций — инструмент внутри экосистемы Ozon",
+      "Интеграция с CRM/CMS — на выяснении",
+    ],
+    params:{
+      rf_cards:      {v:"2,2%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Озон чеки: 0,05% от чека"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"partner", note:"Озон рассрочка"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"unknown"},
+      payout:        {v:"Авто, только на р/с Ozon банка"},
+      crm_cms:       {v:"partial", note:"Есть, на выяснении"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Точка Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"tochkabank", name:"Точка Банк", isPrimary:false,
+    highlights:[
+      "Из pay-методов только T-Pay; MirPay, SberPay, AlfaPay — не поддерживаются",
+      "Нет иностранных карт, нет BNPL, нет рассрочки, нет кредита",
+      "Холд, рекурренты, привязка карты — на уточнении",
+      "Нет фискализации для СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"3,0% мин. 2,5%", note:"2,5% на старте"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Сервис «Точка чеки»"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Долями до 200 000 ₽"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"request", note:"На уточнении"},
+      recurrents:    {v:"request", note:"На уточнении"},
+      card_binding:  {v:"request", note:"На уточнении"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"PayKeeper Касса, Эватор, LIFE POS, БифитКасса, АТОЛ Онлайн"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  PayTure
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"payture", name:"PayTure", isPrimary:false,
+    highlights:[
+      "Нет фискализации 54-ФЗ, нет работы с СМЗ",
+      "СБП — под вопросом (нет подтверждения на сайте)",
+      "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит",
+      "BNPL: только Мокка и МигКредит",
+    ],
+    params:{
+      rf_cards:      {v:"3,2–2,8%"},
+      foreign_cards: {v:"partial", note:"9% + 5% за конвертацию"},
+      sbp:           {v:"unknown"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Мокка, МигКредит"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"OrangeData, АТОЛ Онлайн"},
+      payout:        {v:"Авто, следующий рабочий день"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Pay Master
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"paymaster", name:"Pay Master", isPrimary:false,
+    highlights:[
+      "Нет pay-методов, нет BNPL, нет рассрочки, нет фискализации 54-ФЗ",
+      "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит",
+      "Нет работы с СМЗ",
+      "Минимальный набор функций по сравнению с Robokassa",
+    ],
+    params:{
+      rf_cards:      {v:"2,95–2,0% мин. 2,0%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"Первый ОФД, АТОЛ Онлайн, OrangeData, BusinessKassa, МодульКасса, Такском"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Arsenal Pay
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"arsenalpay", name:"Arsenal Pay", isPrimary:false,
+    highlights:[
+      "Нет СБП, нет pay-методов, нет BNPL, нет рассрочки",
+      "Фискализация платная: ArsenalPay 0,2% от чека",
+      "Нет иностранных карт, нет работы с СМЗ",
+      "Нет интеграции со сторонними кассами",
+    ],
+    params:{
+      rf_cards:      {v:"2,6%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"no"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"ArsenalPay: 0,2% от чека"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"Web-касса ArsenalPay"},
+      third_kassa:   {v:"no"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Модуль Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"modulbank", name:"Модуль Банк", isPrimary:false,
+    highlights:[
+      "Вывод только на р/с Модуль Банка; моментальный +0,2%",
+      "Нет pay-методов, нет холдирования, нет BNPL",
+      "Фискализация платная: МодульКасса 0,8–1,1% от чека (нельзя с маркировкой)",
+      "Нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"от 1,89%", note:"2,49% на старте"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"МодульКасса: 0,8–1,1% от чека; нельзя с маркировкой"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"partner", note:"Рассрочка (уточнить)"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"МодульКасса (без маркировки)"},
+      third_kassa:   {v:"unknown"},
+      payout:        {v:"Авто, только на р/с банка", note:"Моментальный +0,2%"},
+      crm_cms:       {v:"yes"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Уральский Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"uralbank", name:"Уральский Банк", isPrimary:false,
+    highlights:[
+      "Нет pay-методов, нет BNPL, нет рассрочки, нет фискализации",
+      "Нет работы с СМЗ",
+      "Минимальный набор функций по сравнению с Robokassa",
+    ],
+    params:{
+      rf_cards:      {v:"от 2,35% мин. 1,30%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"request", note:"На уточнении"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"PayKeeper Касса, BusinessKassa, Kit Online, OrangeData, АТОЛ Онлайн"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  ВТБ Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"vtbbank", name:"ВТБ Банк", isPrimary:false,
+    highlights:[
+      "Тарифы не опубликованы на сайте — только по запросу",
+      "Нет pay-методов, нет BNPL, нет фискализации 54-ФЗ",
+      "Нет холдирования, привязки карты, работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"от 3,00% мин. 0,50%", note:"Нет инфо на сайте, только по запросу"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"partner", note:"Первый ОФД"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Газпром Банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"gazprombank", name:"Газпром Банк", isPrimary:false,
+    highlights:[
+      "Тарифы на сайте не опубликованы — только по запросу",
+      "Из pay-методов: только Газпром Pay; остальные не подключены",
+      "MirPay, SberPay, T-Pay, МТС Pay, Альфа Pay, Yandex Pay — не поддерживаются",
+    ],
+    params:{
+      rf_cards:      {v:"unknown", note:"Нет инфо на сайте"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"yes"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"yes"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"yes"},
+      own_kassa:     {v:"yes"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"yes"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Райффайзен банк
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"raiffeisen", name:"Райффайзен банк", isPrimary:false,
+    highlights:[
+      "Нет pay-методов, нет BNPL, нет рассрочки, нет кредита",
+      "Нет холдирования, рекуррентов, привязки карты",
+      "Нет фискализации 54-ФЗ",
+      "Нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"2,7%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"no"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"partner", note:"PayKeeper Касса"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Uniteller
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"uniteller", name:"Uniteller", isPrimary:false,
+    highlights:[
+      "Нет СБП, нет pay-методов, нет BNPL, нет рассрочки",
+      "Нет привязки карты, нет работы с СМЗ",
+      "Нет интеграции с CRM/CMS",
+    ],
+    params:{
+      rf_cards:      {v:"2,4% / 2,3%"},
+      foreign_cards: {v:"yes"},
+      sbp:           {v:"no"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"no"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  UnitPay
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"unitpay", name:"UnitPay", isPrimary:false,
+    highlights:[
+      "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит",
+      "Нет холдирования, нет привязки карты, нет BNPL",
+      "Фискализация платная: Юнит.Чеки 0,1% от чека",
+      "Нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"от 3,5%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"yes"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"partial", note:"Юнит.Чеки: 0,1% от чека"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"АТОЛ Онлайн, МодульКасса, E-COM KASSA, Kit Online, Digitalkassa"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Best2pay
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"best2pay", name:"Best2pay", isPrimary:false,
+    highlights:[
+      "Нет СБП, нет рассрочки, нет кредита",
+      "Нет привязки карты, нет работы с СМЗ, нет фискализации 54-ФЗ",
+      "Из pay-методов: только MirPay",
+    ],
+    params:{
+      rf_cards:      {v:"3,2%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"no"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Life Pay
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"lifepay", name:"Life Pay", isPrimary:false,
+    highlights:[
+      "Тарифы зависят от категории — нет прозрачности",
+      "Нет pay-методов, нет BNPL, нет холдирования, нет фискализации 54-ФЗ",
+      "СБП: 0,4–0,7%, но абонплата 500 ₽/мес за 1 сайт",
+      "Нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"По категории", note:"Зависит от категории товаров"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%", note:"500 ₽/мес за 1 сайт"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes", note:"LIFE PAY касса"},
+      third_kassa:   {v:"no"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Pay Selection
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"payselection", name:"Pay Selection", isPrimary:false,
+    highlights:[
+      "Высокая комиссия: 4,7% / 2,7–3%; СБП 3% или 1% — заметно выше рынка",
+      "SberPay только по запросу; T-Pay не поддерживается",
+      "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит",
+      "Нет работы с СМЗ, нет фискализации 54-ФЗ",
+    ],
+    params:{
+      rf_cards:      {v:"4,7% / 2,7–3%"},
+      foreign_cards: {v:"yes"},
+      sbp:           {v:"3% или 1%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"request", note:"Только по запросу"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Подели"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"unknown"},
+      payout:        {v:"Авто, следующий рабочий день"},
+      crm_cms:       {v:"request", note:"На уточнении"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Wallet One
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"walletone", name:"Wallet One", isPrimary:false,
+    highlights:[
+      "СБП привязан к тарифу карт: 2,7%–2,1% — существенно выше рынка",
+      "Нет BNPL, нет рассрочки, нет холдирования",
+      "Нет фискализации 54-ФЗ, нет работы с СМЗ",
+    ],
+    params:{
+      rf_cards:      {v:"2,7%–2,1%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"2,7%–2,1%", note:"Как карты — выше рынка"},
+      pay_methods:   {v:"На 0,5% выше карт"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"yes"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"yes"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Pay any Way
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"payanway", name:"Pay any Way", isPrimary:false,
+    highlights:[
+      "Нет иностранных карт, нет рассрочки, нет кредита",
+      "Нет работы с СМЗ, нет фискализации 54-ФЗ",
+      "Холдирование — под вопросом; большинство pay-методов не поддерживается",
+    ],
+    params:{
+      rf_cards:      {v:"3,4%–2,7%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"unknown"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Pay online
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"payonline", name:"Pay online", isPrimary:false,
+    highlights:[
+      "Нет СБП, нет pay-методов, нет BNPL, нет рассрочки",
+      "Нет работы с СМЗ, нет фискализации 54-ФЗ",
+      "Нет привязки карты",
+    ],
+    params:{
+      rf_cards:      {v:"2,95%–2,6%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"no"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"yes"},
+      third_kassa:   {v:"yes"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Omni pay
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"omnipay", name:"Omni pay", isPrimary:false,
+    highlights:[
+      "Крайне ограниченный набор: только карты РФ, Yandex Pay и Яндекс Сплит",
+      "Нет СБП, нет pay-методов, нет BNPL, нет холдирования",
+      "Нет работы с СМЗ, нет фискализации 54-ФЗ",
+    ],
+    params:{
+      rf_cards:      {v:"unknown", note:"Нет информации на сайте"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"no"},
+      pay_methods:   {v:"no"},
+      mirpay:        {v:"no"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"yes"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"yes"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"no"},
+      recurrents:    {v:"no"},
+      card_binding:  {v:"no"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"no"},
+      payout:        {v:"Авто, следующий рабочий день"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Method
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"method", name:"Method", isPrimary:false,
+    highlights:[
+      "Есть МТС Pay и Yandex Pay — редкость среди конкурентов",
+      "Рассрочка и кредит через FinBox («Всегда да»)",
+      "Нет работы с СМЗ, нет фискализации 54-ФЗ",
+      "Нет Газпром Pay, Альфа Pay, Яндекс Сплит",
+    ],
+    params:{
+      rf_cards:      {v:"от 2,80% мин. 2,40%"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"Как карты"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"yes"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"yes"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"no"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"partner", note:"Плайт, Подели"},
+      installment:   {v:"partner", note:"Всегда да, FinBox"},
+      credit:        {v:"partner", note:"Всегда да, FinBox"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"yes", note:"CloudKassir, OrangeData, Business Kassa, АТОЛ Онлайн, Kit Online"},
+      payout:        {v:"Авто, ежедневно"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════
+  //  Русский стандарт
+  // ═══════════════════════════════════════════════════════
+  {
+    id:"russtandart", name:"Русский стандарт", isPrimary:false,
+    highlights:[
+      "Тарифы на сайте не опубликованы — только по запросу",
+      "Из pay-методов только MirPay; остальные не поддерживаются",
+      "Нет BNPL, рассрочки, работы с СМЗ, фискализации 54-ФЗ",
+    ],
+    params:{
+      rf_cards:      {v:"unknown", note:"Нет информации на сайте"},
+      foreign_cards: {v:"no"},
+      sbp:           {v:"0,4–0,7%"},
+      pay_methods:   {v:"unknown"},
+      mirpay:        {v:"yes"},
+      sberpay:       {v:"no"},
+      tpay:          {v:"no"},
+      mtcpay:        {v:"no"},
+      alfapay:       {v:"no"},
+      gazprompay:    {v:"no"},
+      yandexpay:     {v:"no"},
+      fiscal_54fz:   {v:"no"},
+      fiscal_smz:    {v:"yes"},
+      yandex_split:  {v:"no"},
+      bnpl:          {v:"no"},
+      installment:   {v:"no"},
+      credit:        {v:"no"},
+      hold:          {v:"yes"},
+      recurrents:    {v:"yes"},
+      card_binding:  {v:"yes"},
+      smz:           {v:"no"},
+      own_kassa:     {v:"no"},
+      third_kassa:   {v:"partner", note:"OFD.ru"},
+      payout:        {v:"Авто, следующий рабочий день"},
+      crm_cms:       {v:"yes", note:"Ссылка на интеграции"},
+    },
+  },
+
+  // ШАБЛОН ДЛЯ НОВОГО КОНКУРЕНТА — раскомментируй и заполни:
+  // { id:"new", name:"Название", isPrimary:false, highlights:["Отличие 1","Отличие 2"],
+  //   params:{ rf_cards:{v:"3,5%"}, foreign_cards:{v:"no"}, sbp:{v:"yes"}, pay_methods:{v:"Как карты"},
+  //     mirpay:{v:"no"}, sberpay:{v:"no"}, tpay:{v:"no"}, mtcpay:{v:"no"}, alfapay:{v:"no"},
+  //     gazprompay:{v:"no"}, yandexpay:{v:"no"}, fiscal_54fz:{v:"no"}, fiscal_smz:{v:"no"},
+  //     yandex_split:{v:"no"}, bnpl:{v:"no"}, installment:{v:"no"}, credit:{v:"no"},
+  //     hold:{v:"no"}, recurrents:{v:"no"}, card_binding:{v:"no"}, smz:{v:"no"},
+  //     own_kassa:{v:"no"}, third_kassa:{v:"no"}, payout:{v:"Авто, ежедневно"}, crm_cms:{v:"no"} } },
+
+];
+
+// ════════════════════════════════════════════════════
+//  Логика рендера — не трогать
+// ════════════════════════════════════════════════════
+const VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};
+const VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷"};
+const VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};
+const primary=providers.find(p=>p.isPrimary), rivals=providers.filter(p=>!p.isPrimary);
+let curRival=rivals[0], mode='all';
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderVal(p){
+  if(!p||p.v===undefined||String(p.v).trim()==='') return '<span class="val-unk">—</span>';
+  const v=String(p.v).trim(), note=p.note?`<div class="p-note">${esc(p.note)}</div>`:'';
+  if(v==='unknown') return '<span class="val-unk">Нет данных</span>'+note;
+  if(VL[v]) return `<span class="${VC[v]}"><i>${VI[v]}</i> ${VL[v]}</span>${note}`;
+  return `<span class="val-text">${esc(v)}</span>${note}`;
+}
+function areSame(a,b){
+  const e=x=>!x||x.v===undefined||String(x.v).trim()==='';
+  if(e(a)&&e(b)) return true; if(e(a)||e(b)) return false;
+  const na=String(a.v).toLowerCase().trim(), nb=String(b.v).toLowerCase().trim();
+  if(na==='unknown'||nb==='unknown'||na==='soon'||nb==='soon') return false;
+  return na===nb;
+}
+function render(){
+  document.getElementById('rival-name').textContent=curRival.name;
+  document.getElementById('col-rival-name').textContent=curRival.name;
+  const hlArea=document.getElementById('hl-area'), hl=curRival.highlights||[];
+  if(hl.length){
+    hlArea.style.display='block';
+    hlArea.innerHTML=`<div class="highlights"><div class="hl-title">Ключевые отличия: Robokassa vs ${esc(curRival.name)}</div>${hl.map(h=>`<div class="hl-item"><span class="hl-dot"></span>${esc(h)}</div>`).join('')}</div>`;
+  } else { hlArea.innerHTML=''; hlArea.style.display='none'; }
+  const area=document.getElementById('cmp-area'); area.innerHTML='';
+  sections.forEach(sec=>{
+    const block=document.createElement('div'); block.className='section';
+    block.innerHTML=`<div class="section-head"><span class="section-line"></span><span class="section-title">${esc(sec.title)}</span></div>`;
+    sec.params.forEach(pid=>{
+      const pv=primary.params[pid]||null, cv=curRival.params[pid]||null, diff=!areSame(pv,cv);
+      const row=document.createElement('div');
+      row.className='param-row'+(diff?' diff':''); row.dataset.same=diff?'0':'1';
+      row.innerHTML=`<div class="p-label">${esc(paramMeta[pid]||pid)}</div><div class="p-cell p-cell--rk">${renderVal(pv)}</div><div class="p-cell">${renderVal(cv)}</div>`;
+      block.appendChild(row);
+    });
+    area.appendChild(block);
+  });
+  applyMode();
+}
+function applyMode(){
+  let cnt=0;
+  document.querySelectorAll('.param-row').forEach(r=>{const s=r.dataset.same==='1';r.classList.toggle('hidden',mode==='diff'&&s);if(!s)cnt++;});
+  document.querySelectorAll('.no-diff-notice').forEach(el=>el.remove());
+  if(mode==='diff'){
+    document.querySelectorAll('.section').forEach(sec=>{
+      if(!sec.querySelectorAll('.param-row:not(.hidden)').length){
+        const m=document.createElement('div'); m.className='no-diff-notice'; m.textContent='В этой секции условия совпадают'; sec.appendChild(m);
+      }
+    });
+  }
+  document.getElementById('diff-n').textContent=cnt;
+  document.getElementById('diff-counter').classList.toggle('vis',mode==='diff');
+}
+const sel=document.getElementById('rival-sel');
+rivals.forEach(r=>{const o=document.createElement('option');o.value=r.id;o.textContent=r.name;sel.appendChild(o);});
+sel.addEventListener('change',e=>{curRival=rivals.find(r=>r.id===e.target.value)||rivals[0];render();});
+document.getElementById('btn-all').addEventListener('click',()=>{if(mode==='all')return;mode='all';document.getElementById('btn-all').classList.add('on');document.getElementById('btn-diff').classList.remove('on');applyMode();});
+document.getElementById('btn-diff').addEventListener('click',()=>{if(mode==='diff')return;mode='diff';document.getElementById('btn-diff').classList.add('on');document.getElementById('btn-all').classList.remove('on');applyMode();});
+render();
+</script>
 </body>
 </html>
