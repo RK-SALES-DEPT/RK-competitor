@@ -1,0 +1,557 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   styles.css — страница сравнения Robokassa с конкурентами
+   Стилистика: Конечный код.html (Калькулятор выгоды)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ── CSS-переменные (из референса, без изменений) ── */
+:root {
+  --rk-blue:        #525FFB;
+  --rk-blue-hover:  #3D49F0;
+  --rk-bg:          #F2F5FA;
+  --rk-white:       #FFFFFF;
+  --rk-success:     #0D9F6E;
+  --rk-success-bg:  #EAF8F2;
+  --rk-danger:      #D93547;
+  --rk-danger-bg:   #FFF1F3;
+  --rk-border:      #E2E7F1;
+  --rk-text:        #182033;
+  --rk-text-muted:  #6B7394;
+  --rk-radius:      20px;
+  --rk-radius-sm:   14px;
+  --rk-shadow:      0 10px 30px rgba(29, 37, 74, 0.08);
+  --rk-shadow-sm:   0 4px 14px rgba(29, 37, 74, 0.06);
+  --rk-font:        'Geologica', sans-serif;
+
+  /* Дополнительно для страницы сравнения */
+  --rk-amber:       #A06A00;
+  --rk-amber-bg:    #FFF8E6;
+  --rk-amber-border: rgba(160, 106, 0, 0.20);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  padding: 32px 20px 64px;
+  font-family: var(--rk-font);
+  background: var(--rk-bg);
+  color: var(--rk-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   БАЗОВАЯ СТРУКТУРА (из референса)
+   ══════════════════════════════════════════════════════════ */
+
+.page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Лого ── */
+.brand-row       { display: flex; align-items: center; margin-bottom: 4px; }
+.brand-picture   { display: block; line-height: 0; }
+.brand-logo      { width: 168px; height: auto; display: block; }
+.logo-fallback   {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--rk-text);
+  letter-spacing: -0.5px;
+  font-family: var(--rk-font);
+}
+
+/* ── Hero ── */
+.hero            { text-align: center; margin-bottom: 0; }
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.hero p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--rk-text-muted);
+  font-weight: 500;
+}
+
+/* ── Базовая карточка (из референса) ── */
+.card {
+  background: var(--rk-white);
+  border: 1px solid var(--rk-border);
+  border-radius: var(--rk-radius);
+  box-shadow: var(--rk-shadow-sm);
+  padding: 22px;
+}
+.card-title {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rk-text-muted);
+}
+
+/* ── Переключатель (из референса) ── */
+.switcher {
+  display: inline-flex;
+  background: rgba(82, 95, 251, 0.08);
+  border: 1px solid rgba(82, 95, 251, 0.14);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: var(--rk-shadow-sm);
+}
+.switcher button {
+  border: 0;
+  background: transparent;
+  color: var(--rk-text-muted);
+  font-family: var(--rk-font);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .18s ease;
+  white-space: nowrap;
+}
+.switcher button.active {
+  background: var(--rk-blue);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(82, 95, 251, 0.28);
+}
+.switcher button:not(.active):hover {
+  color: var(--rk-text);
+  background: rgba(82, 95, 251, 0.06);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   СЛУЖЕБНАЯ ПЛАШКА
+   ══════════════════════════════════════════════════════════ */
+
+.internal-badge {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 18px;
+  background: rgba(217, 53, 71, 0.05);
+  border: 1px solid rgba(217, 53, 71, 0.18);
+  border-radius: var(--rk-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rk-danger);
+  line-height: 1.4;
+}
+.internal-badge__icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   ПАНЕЛЬ УПРАВЛЕНИЯ
+   ══════════════════════════════════════════════════════════ */
+
+.controls-card  { padding: 18px 22px; }
+.controls-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.control-group  { display: flex; flex-direction: column; gap: 8px; }
+.control-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--rk-text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Select конкурента */
+.select-wrap    { position: relative; display: inline-block; }
+.competitor-select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 42px;
+  min-width: 230px;
+  border: 1px solid #CBD4E5;
+  border-radius: 16px;
+  padding: 0 44px 0 18px;
+  font-family: var(--rk-font);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rk-text);
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: .18s ease;
+}
+.competitor-select:focus {
+  border-color: rgba(82, 95, 251, 0.45);
+  box-shadow: 0 0 0 4px rgba(82, 95, 251, 0.09);
+}
+.competitor-select:hover {
+  border-color: rgba(82, 95, 251, 0.30);
+}
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--rk-text-muted);
+}
+
+/* Счётчик отличий */
+.diff-counter {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rk-text-muted);
+  padding: 8px 0;
+  align-self: flex-end;
+}
+.diff-counter.visible { display: flex; }
+.diff-counter__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(82, 95, 251, 0.10);
+  color: var(--rk-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   STICKY-ШАПКА КОЛОНОК
+   ══════════════════════════════════════════════════════════ */
+
+.compare-sticky-header {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  background: var(--rk-white);
+  border: 1px solid var(--rk-border);
+  border-radius: var(--rk-radius);
+  box-shadow: var(--rk-shadow);
+  padding: 14px 22px;
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1.6fr;
+  gap: 12px;
+  align-items: center;
+}
+.csh-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rk-text-muted);
+}
+.csh-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.csh-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rk-text);
+  line-height: 1.2;
+}
+.csh-tag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+.csh-tag--primary {
+  background: rgba(82, 95, 251, 0.10);
+  color: var(--rk-blue);
+}
+.csh-tag--competitor {
+  background: rgba(107, 115, 148, 0.10);
+  color: var(--rk-text-muted);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   БЛОК КЛЮЧЕВЫХ ОТЛИЧИЙ
+   ══════════════════════════════════════════════════════════ */
+
+.highlights-card { padding: 18px 22px; }
+.highlights-title {
+  margin: 0 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rk-text-muted);
+}
+.highlights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rk-text);
+  line-height: 1.5;
+}
+.highlight-dot {
+  width: 7px;
+  min-width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rk-blue);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   СЕКЦИИ СРАВНЕНИЯ
+   ══════════════════════════════════════════════════════════ */
+
+.section-card {
+  background: var(--rk-white);
+  border: 1px solid var(--rk-border);
+  border-radius: var(--rk-radius);
+  box-shadow: var(--rk-shadow-sm);
+  overflow: hidden;
+}
+.section-title {
+  padding: 14px 22px 13px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rk-text-muted);
+  background: rgba(107, 115, 148, 0.04);
+  border-bottom: 1px solid var(--rk-border);
+}
+
+/* ── Строка параметра ── */
+.param-row {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1.6fr;
+  gap: 12px;
+  padding: 11px 22px;
+  border-bottom: 1px solid var(--rk-border);
+  align-items: start;
+  transition: background .12s ease;
+}
+.param-row:last-child { border-bottom: none; }
+.param-row:hover      { background: rgba(82, 95, 251, 0.022); }
+
+/* Строка с отличием — тонкий синий акцент слева */
+.param-row--diff {
+  border-left: 3px solid rgba(82, 95, 251, 0.22);
+  padding-left: 19px;
+}
+.param-row--diff:hover { background: rgba(82, 95, 251, 0.03); }
+
+/* Скрытая строка в режиме «только отличия» */
+.param-row--same-hidden { display: none; }
+
+/* Название параметра */
+.param-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rk-text);
+  line-height: 1.45;
+  padding-top: 3px;
+}
+
+/* Ячейка значения */
+.value-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+.value-note {
+  font-size: 11px;
+  color: var(--rk-text-muted);
+  font-weight: 500;
+  line-height: 1.4;
+  max-width: 200px;
+}
+
+/* Плашка «нет отличий в секции» */
+.no-diff-notice {
+  padding: 16px 22px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rk-text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   БЕЙДЖИ ЗНАЧЕНИЙ
+   ══════════════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  font-family: var(--rk-font);
+}
+.badge__icon { font-size: 11px; font-style: normal; }
+
+/* Есть */
+.badge--yes {
+  background: var(--rk-success-bg);
+  color: var(--rk-success);
+  border: 1px solid rgba(13, 159, 110, 0.15);
+}
+/* Нет */
+.badge--no {
+  background: var(--rk-danger-bg);
+  color: var(--rk-danger);
+  border: 1px solid rgba(217, 53, 71, 0.15);
+}
+/* Частично */
+.badge--partial {
+  background: var(--rk-amber-bg);
+  color: var(--rk-amber);
+  border: 1px solid var(--rk-amber-border);
+}
+/* Через партнёра */
+.badge--partner {
+  background: rgba(82, 95, 251, 0.08);
+  color: var(--rk-blue);
+  border: 1px solid rgba(82, 95, 251, 0.14);
+}
+/* По запросу */
+.badge--request {
+  background: rgba(107, 115, 148, 0.08);
+  color: var(--rk-text-muted);
+  border: 1px solid rgba(107, 115, 148, 0.14);
+}
+/* Скоро */
+.badge--soon {
+  background: rgba(107, 115, 148, 0.08);
+  color: var(--rk-text-muted);
+  border: 1px solid rgba(107, 115, 148, 0.14);
+}
+
+/* Текстовое значение (тарифы, числа и т.д.) */
+.value-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rk-text);
+  line-height: 1.4;
+}
+/* Нет данных */
+.value-unknown {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rk-text-muted);
+  opacity: 0.7;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   АДАПТИВ
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 860px) {
+  .compare-sticky-header {
+    grid-template-columns: 1.5fr 1.2fr 1.2fr;
+    gap: 8px;
+    padding: 12px 18px;
+  }
+  .param-row {
+    grid-template-columns: 1.5fr 1.2fr 1.2fr;
+    gap: 8px;
+    padding: 10px 18px;
+  }
+  .param-row--diff { padding-left: 15px; }
+  .section-title   { padding: 13px 18px 12px; }
+  .highlights-card { padding: 16px 18px; }
+}
+
+@media (max-width: 768px) {
+  body             { padding: 24px 16px 52px; }
+  .page            { gap: 12px; }
+  .brand-logo      { width: 32px; }
+  .hero h1         { font-size: 26px; }
+  .controls-row    { gap: 16px; }
+  .csh-name        { font-size: 13px; }
+  .csh-tag         { display: none; }
+  .competitor-select { min-width: 200px; }
+}
+
+@media (max-width: 600px) {
+  .compare-sticky-header {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    padding: 10px 14px;
+    gap: 6px;
+    top: 0;
+    border-radius: 0;
+    margin: 0 -16px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+  }
+  .csh-label { display: none; }
+  .csh-name  { font-size: 12px; }
+
+  .section-card  { border-radius: 16px; }
+  .section-title { padding: 11px 14px; }
+  .param-row {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 6px;
+    padding: 9px 14px;
+  }
+  .param-row--diff { padding-left: 11px; }
+  .param-label     { font-size: 12px; }
+  .badge           { font-size: 11px; padding: 3px 8px; }
+  .value-text      { font-size: 12px; }
+  .value-note      { font-size: 10px; }
+
+  .highlights-card { padding: 14px 16px; border-radius: 16px; }
+  .controls-card   { border-radius: 16px; }
+  .competitor-select { min-width: 160px; }
+}
