@@ -281,13 +281,7 @@ const providers = [
   },
   {
     id:"юкасса", name:"Ю.касса", isPrimary:false,
-    highlights:[
-      "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa",
-      "Работа с СМЗ и чеки для СМЗ — только у Robokassa",
-      "Фискализация у Ю.кассы платная (доп. комиссия сверх тарифа); у Robokassa включена",
-      "Привязка карты — только у Robokassa; у Ю.кассы отсутствует",
-      "СБП у Ю.кассы дешевле: 0,4–0,7% против от 1,8% у Robokassa",
-    ],
+    highlights:["МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa", "Работа с СМЗ и чеки для СМЗ — только у Robokassa", "Фискализация у Ю.кассы платная (доп. комиссия сверх тарифа); у Robokassa включена", "Привязка карты — только у Robokassa; у Ю.кассы отсутствует", "СБП у Ю.кассы дешевле: 0,4–0,7% против от 1,8% у Robokassa"],
     params:{
       rf_cards: {v:"3,5% мин. 2,8%"},
       foreign_cards: {v:"4,00%"},
@@ -964,7 +958,7 @@ const providers = [
       own_kassa: {v:"no"},
       third_kassa: {v:"unknown"},
       payout: {v:"Автоматический ежедневный вывод на сл.раб.день"},
-      crm_cms: {v:"request", note:"На уточнении"},
+      crm_cms: {v:"partner", note:"Есть все"},
     },
   },
   {
