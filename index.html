@@ -1248,32 +1248,21 @@ render();
 </script>
 <script id="rk-patch">
 (function(){
-  function isUrl(s){return s&&(s.startsWith("http://")||s.startsWith("https://"));}
-  function urlDomain(u){return u.replace(/https?:\/\/www\.?/,"").split("/")[0];}
-  function newRenderVal(p){
-    if(!p||p.v===undefined||String(p.v).trim()==="") return "<span class=\"val-unk\">—</span>";
-    var v=String(p.v).trim(), note=p.note||"", ni=isUrl(note);
-    if(v==="unknown") return "<span class=\"val-unk\">Нет данных</span>";
-    var lnk=function(href,label){return "<a href=\""+href+"\" target=\"_blank\" class=\"p-link-full\">🔗 "+label+"</a>";};
-    if(v==="link"&&ni) return lnk(note,urlDomain(note));
-    if(isUrl(v)) return lnk(v,urlDomain(v));
-    var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};
-    var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};
-    var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};
-    function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-    if(v!=="partner"&&VL[v]){
-      var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,urlDomain(note))+"</div>":"<div class=\"p-note\">"+esc(note)+"</div>"):"";
-      return "<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;
-    }
-    if(v==="partner"&&ni) return lnk(note,urlDomain(note));
-    if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+esc(note)+"</div>":"";return "<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}
-    if(ni) return lnk(note,esc(v));
-    var nh3=note?"<div class=\"p-note\">"+esc(note)+"</div>":"";
-    return "<span class=\"val-text\">"+esc(v)+"</span>"+nh3;
+  function fixChips(){
+    document.querySelectorAll(".p-cell").forEach(function(cell){
+      var chip = cell.querySelector(".chip-ptn");
+      var link = cell.querySelector(".p-note a[href], a.p-link-full, a.p-link");
+      if(chip && link) chip.style.display="none";
+    });
   }
-  // Переопределяем глобальную функцию и перерисовываем
-  if(typeof renderVal!=="undefined") renderVal=newRenderVal;
-  if(typeof render==="function") render();
+  // Перехватываем render() чтобы фикс работал при смене конкурента
+  var _origRender = typeof render==="function" ? render : null;
+  if(_origRender){
+    render = function(){ _origRender.apply(this,arguments); fixChips(); };
+    render();
+  } else {
+    document.addEventListener("DOMContentLoaded", fixChips);
+  }
 })();
 </script>
 </body>
