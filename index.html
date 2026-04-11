@@ -1136,30 +1136,52 @@ const primary=providers.find(p=>p.isPrimary), rivals=providers.filter(p=>!p.isPr
 let curRival=rivals[0], mode='all';
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-// @@RENDERVAL_START@@
 function isUrl(s){return s&&(s.startsWith('http://')||s.startsWith('https://'));}
 function urlDomain(u){return u.replace(/https?:\/\/www\.?/,'').split('/')[0];}
 function renderVal(p){
   if(!p||p.v===undefined||String(p.v).trim()==='') return '<span class="val-unk">—</span>';
-  var v=String(p.v).trim(), note=p.note||'';
-  var noteIsUrl=isUrl(note);
+  const v=String(p.v).trim(), note=p.note||'';
+  const noteIsUrl=isUrl(note);
+
+  // Unknown
   if(v==='unknown') return '<span class="val-unk">Нет данных</span>';
-  if(v==='link'&&noteIsUrl) return '<a href="'+note+'" target="_blank" class="p-link-full">🔗 '+esc(urlDomain(note))+'</a>';
-  if(isUrl(v)) return '<a href="'+v+'" target="_blank" class="p-link-full">🔗 '+esc(urlDomain(v))+'</a>';
+
+  // Pure link (v='link') → just the hyperlink, no chip
+  if(v==='link'&&noteIsUrl)
+    return `<a href="${note}" target="_blank" class="p-link-full">🔗 ${esc(urlDomain(note))}</a>`;
+
+  // Value itself is a URL
+  if(isUrl(v))
+    return `<a href="${v}" target="_blank" class="p-link-full">🔗 ${esc(urlDomain(v))}</a>`;
+
+  // Standard chips (yes/no/partial/request/soon) — keep chip, add link if note is URL
   if(v!=='partner'&&VL[v]){
-    var noteHtml=note?(noteIsUrl?'<div class="p-note"><a href="'+note+'" target="_blank" class="p-link">🔗 '+esc(urlDomain(note))+'</a></div>':'<div class="p-note">'+esc(note)+'</div>'):'';
-    return '<span class="'+VC[v]+'"><i>'+VI[v]+'</i> '+VL[v]+'</span>'+noteHtml;
+    const noteHtml=note
+      ? (noteIsUrl
+          ? `<div class="p-note"><a href="${note}" target="_blank" class="p-link">🔗 ${esc(urlDomain(note))}</a></div>`
+          : `<div class="p-note">${esc(note)}</div>`)
+      : '';
+    return `<span class="${VC[v]}"><i>${VI[v]}</i> ${VL[v]}</span>${noteHtml}`;
   }
-  if(v==='partner'&&noteIsUrl) return '<a href="'+note+'" target="_blank" class="p-link-full">🔗 '+esc(urlDomain(note))+'</a>';
+
+  // Partner with URL note → drop chip, show link only
+  if(v==='partner'&&noteIsUrl)
+    return `<a href="${note}" target="_blank" class="p-link-full">🔗 ${esc(urlDomain(note))}</a>`;
+
+  // Partner with text note → keep chip + note
   if(v==='partner'){
-    var noteHtml2=note?'<div class="p-note">'+esc(note)+'</div>':'';
-    return '<span class="'+VC['partner']+'"><i>'+VI['partner']+'</i> '+VL['partner']+'</span>'+noteHtml2;
+    const noteHtml=note?`<div class="p-note">${esc(note)}</div>`:'';
+    return `<span class="${VC['partner']}"><i>${VI['partner']}</i> ${VL['partner']}</span>${noteHtml}`;
   }
-  if(noteIsUrl) return '<a href="'+note+'" target="_blank" class="p-link-full">'+esc(v)+'</a>';
-  var noteHtml3=note?'<div class="p-note">'+esc(note)+'</div>':'';
-  return '<span class="val-text">'+esc(v)+'</span>'+noteHtml3;
+
+  // Plain text value + URL note → text as clickable link
+  if(noteIsUrl)
+    return `<a href="${note}" target="_blank" class="p-link-full">${esc(v)}</a>`;
+
+  // Plain text + text note
+  const noteHtml=note?`<div class="p-note">${esc(note)}</div>`:'';
+  return `<span class="val-text">${esc(v)}</span>${noteHtml}`;
 }
-// @@RENDERVAL_END@@
 function areSame(a,b){
   const e=x=>!x||x.v===undefined||String(x.v).trim()==='';
   if(e(a)&&e(b)) return true; if(e(a)||e(b)) return false;
@@ -1223,6 +1245,36 @@ sel.addEventListener('change',e=>{curRival=rivals.find(r=>r.id===e.target.value)
 document.getElementById('btn-all').addEventListener('click',()=>{if(mode==='all')return;mode='all';document.getElementById('btn-all').classList.add('on');document.getElementById('btn-diff').classList.remove('on');applyMode();});
 document.getElementById('btn-diff').addEventListener('click',()=>{if(mode==='diff')return;mode='diff';document.getElementById('btn-diff').classList.add('on');document.getElementById('btn-all').classList.remove('on');applyMode();});
 render();
+</script>
+<script id="rk-patch">
+(function(){
+  function isUrl(s){return s&&(s.startsWith("http://")||s.startsWith("https://"));}
+  function urlDomain(u){return u.replace(/https?:\/\/www\.?/,"").split("/")[0];}
+  function newRenderVal(p){
+    if(!p||p.v===undefined||String(p.v).trim()==="") return "<span class=\"val-unk\">—</span>";
+    var v=String(p.v).trim(), note=p.note||"", ni=isUrl(note);
+    if(v==="unknown") return "<span class=\"val-unk\">Нет данных</span>";
+    var lnk=function(href,label){return "<a href=\""+href+"\" target=\"_blank\" class=\"p-link-full\">🔗 "+label+"</a>";};
+    if(v==="link"&&ni) return lnk(note,urlDomain(note));
+    if(isUrl(v)) return lnk(v,urlDomain(v));
+    var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};
+    var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};
+    var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};
+    function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    if(v!=="partner"&&VL[v]){
+      var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,urlDomain(note))+"</div>":"<div class=\"p-note\">"+esc(note)+"</div>"):"";
+      return "<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;
+    }
+    if(v==="partner"&&ni) return lnk(note,urlDomain(note));
+    if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+esc(note)+"</div>":"";return "<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}
+    if(ni) return lnk(note,esc(v));
+    var nh3=note?"<div class=\"p-note\">"+esc(note)+"</div>":"";
+    return "<span class=\"val-text\">"+esc(v)+"</span>"+nh3;
+  }
+  // Переопределяем глобальную функцию и перерисовываем
+  if(typeof renderVal!=="undefined") renderVal=newRenderVal;
+  if(typeof render==="function") render();
+})();
 </script>
 </body>
 </html>
