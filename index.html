@@ -76,6 +76,9 @@
     .ch-tag--p { background: rgba(82,95,251,0.09); color: var(--blue); }
     .ch-tag--r { background: rgba(107,115,148,0.09); color: var(--muted); }
     .highlights { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 0 var(--r-sm) var(--r-sm) 0; box-shadow: var(--shadow-sm); padding: 14px 18px; }
+    .notes { background: var(--white); border: 1px solid rgba(160,106,0,0.25); border-left: 3px solid var(--amber); border-radius: 0 var(--r-sm) var(--r-sm) 0; box-shadow: var(--shadow-sm); padding: 14px 18px; }
+    .notes-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+    .notes-text { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.6; white-space: pre-wrap; }
     .hl-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
     .hl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 5px; }
     .hl-item:last-child { margin-bottom: 0; }
@@ -184,6 +187,7 @@
   </div>
 
   <div id="hl-area"></div>
+  <div id="notes-area"></div>
   <div id="cmp-area"></div>
 
 </div>
@@ -256,19 +260,26 @@ const providers = [
     id:"robokassa", name:"Робокасса", isPrimary:true,
     highlights:[],
     params:{
-      rf_cards: {v:"3,9% мин 2,9%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"3,9%
+мин 2,9%"},
       foreign_cards: {v:"9,9%"},
-      sbp: {v:"от 2,7% min 1,8% лимит 1 млн₽"},
-      pay_methods: {v:"как карты Alfapay+0,3% Yandex pay+1,9%"},
+      sbp: {v:"от 2,7%
+min 1,8%
+лимит 1 млн₽"},
+      pay_methods: {v:"как карты
+Alfapay+0,3%
+Yandex pay+1,9%"},
       mirpay: {v:"yes"},
       sberpay: {v:"yes"},
       tpay: {v:"yes"},
       mtcpay: {v:"yes"},
       alfapay: {v:"yes"},
-      gazprompay: {v:"partner", note:"Cкоро"},
+      gazprompay: {v:"soon"},
       yandexpay: {v:"yes"},
       yandex_split: {v:"yes"},
-      bnpl: {v:"partner", note:"Подели Mokka"},
+      bnpl: {v:"partner", note:"Подели
+Mokka"},
       installment: {v:"partner", note:"ОТП"},
       credit: {v:"partner", note:"ОТП"},
       hold: {v:"yes"},
@@ -276,21 +287,25 @@ const providers = [
       card_binding: {v:"yes"},
       smz: {v:"yes"},
       fiscal_smz: {v:"yes"},
-      fiscal_54fz: {v:"partner", note:"Робочеки"},
+      fiscal_54fz: {v:"Робочеки", note:"https://robokassa.com/online-check/robocheck/"},
       own_kassa: {v:"partner", note:"Robokassa Online"},
       third_kassa: {v:"yes"},
       payout: {v:"Настраиваемый ввод"},
-      crm_cms: {v:"partner", note:"🔗 docs.robokassa.ru"},
+      crm_cms: {v:"link", note:"https://docs.robokassa.ru/ru/widgets-modules-sdk/"},
     },
   },
   {
     id:"yukassasber", name:"Ю.касса / СБЕР", isPrimary:false,
-    highlights:[],
+    highlights:["МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa", "Работа с СМЗ и чеки для СМЗ — только у Robokassa", "Фискализация у Ю.кассы платная (доп. комиссия сверх тарифа); у Robokassa включена", "Привязка карты — только у Robokassa; у Ю.кассы отсутствует", "СБП у Ю.кассы дешевле: 0,4–0,7% против от 1,8% у Robokassa"],
     params:{
-      rf_cards: {v:"3,5% мин. 2,8%"},
+      osobennosti: {v:"Спецтариф для клиентов с р/с в Сбере при подключении к Юкасса впервые", note:"https://yoomoney.ru/page?id=536824"},
+      rf_cards: {v:"3,5%
+мин. 2,8%"},
       foreign_cards: {v:"4,0%"},
-      sbp: {v:"0,4-0,7% лимит 700К"},
-      pay_methods: {v:"как карты Т-pay 3,8%"},
+      sbp: {v:"0,4-0,7%
+лимит 700К"},
+      pay_methods: {v:"как карты
+Т-pay 3,8%"},
       mirpay: {v:"yes"},
       sberpay: {v:"yes"},
       tpay: {v:"yes"},
@@ -307,21 +322,29 @@ const providers = [
       card_binding: {v:"no"},
       smz: {v:"yes"},
       fiscal_smz: {v:"no"},
-      fiscal_54fz: {v:"partner", note:"Чеки от ЮKassa идет как доп. комиссия поверх тарифа (зависит от оборота)"},
-      own_kassa: {v:"partner", note:"🔗 yookassa.ru"},
+      fiscal_54fz: {v:"Чеки от ЮKassa
+идет как доп. комиссия поверх тарифа (зависит от оборота)", note:"https://yookassa.ru/54fz/"},
+      own_kassa: {v:"link", note:"https://yookassa.ru/54fz/"},
       third_kassa: {v:"yes"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 yookassa.ru"},
+      crm_cms: {v:"link", note:"https://yookassa.ru/integration/cms/"},
     },
   },
   {
     id:"prodamus", name:"Prodamus", isPrimary:false,
     highlights:["Фискализация (54-ФЗ) — у Prodamus нет; у Robokassa включена в тариф", "Холдирование, MirPay, МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay — только у Robokassa", "СБП у Prodamus дороже: от 3,8% против от 1,8% у Robokassa", "Prodamus специализируется на инфобизнесе — ограниченный набор инструментов"],
     params:{
-      rf_cards: {v:"3,8% мин. 2,9%"},
+      osobennosti: {v:"Подключение для ИП и ЮЛ - 10 000 руб. (по промокоду 8 000 руб.)
+Льготный период 3 месяца: на первые 100 000 руб. нет комиссии оплаты на банковские реквизиты, банковские карты, СБП, Сбербанк Онлайн, T-pay, WB Кошелёк ,Яндекс Пэй
+Подключение для СМЗ - 10 000 руб. (по акции 2 500 руб.)
+Льготного периода нет"},
+      rf_cards: {v:"3,8%
+мин. 2,9%"},
       foreign_cards: {v:"10,0%"},
-      sbp: {v:"от 3,8% как карты"},
-      pay_methods: {v:"от 3,8% +0,3% к картам"},
+      sbp: {v:"от 3,8%
+как карты"},
+      pay_methods: {v:"от 3,8%
++0,3% к картам"},
       mirpay: {v:"no"},
       sberpay: {v:"yes"},
       tpay: {v:"yes"},
@@ -330,8 +353,15 @@ const providers = [
       gazprompay: {v:"no"},
       yandexpay: {v:"no"},
       yandex_split: {v:"yes"},
-      bnpl: {v:"partner", note:"Prodamus Частями от 3500 Долями до 200 000 ₽ Плати Частями от Сбер до 150 000 ₽"},
-      installment: {v:"partner", note:"Т-Банк Кредит ОТП Директ Кредит Фреш кредит Долями + ПроОнлайн (для КЗ, КырГыз, Беларуси)"},
+      bnpl: {v:"partner", note:"Prodamus Частями от 3500
+Долями до 200 000 ₽
+Плати Частями от Сбер до 150 000 ₽"},
+      installment: {v:"partner", note:"Т-Банк Кредит
+ОТП
+Директ Кредит
+Фреш кредит
+Долями +
+ПроОнлайн (для КЗ, КырГыз, Беларуси)"},
       credit: {v:"partner", note:"Т-Банк Кредит"},
       hold: {v:"no"},
       recurrents: {v:"yes"},
@@ -340,16 +370,23 @@ const providers = [
       fiscal_smz: {v:"yes"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"partner", note:"Prodamus.Kassa"},
-      third_kassa: {v:"partner", note:"OrangeData БИФИТ Касса Дримкас МодульКасса"},
+      third_kassa: {v:"partner", note:"OrangeData
+БИФИТ Касса
+Дримкас
+МодульКасса"},
       payout: {v:"Автоматический ежедневный вывод на второй день после приема оплаты."},
-      crm_cms: {v:"partner", note:"🔗 help.prodamus.ru"},
+      crm_cms: {v:"link", note:"https://help.prodamus.ru/payform.ru-onlain-oplaty/integracii"},
     },
   },
   {
     id:"cloudpayments", name:"CloudPayments", isPrimary:false,
     highlights:["Фискализация платная: +1,5% поверх операции + 1 500 ₽/год; у Robokassa включена", "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — только у Robokassa", "Работа с СМЗ и Чеки для СМЗ — только у Robokassa", "Комиссия по картам у CloudPayments ниже: 2,9% мин. 2,5%"],
     params:{
-      rf_cards: {v:"2,9% мин. 2,5%"},
+      osobennosti: {v:"На подключение второго/нескольких эквайрингов для каждого банка нужно подписывать отдельную анкету (это БРС, Тинькофф, МКБ) и ждать подключения от 1 до 3 недель
+Ежемесячная комиссия 900 руб. при обороте менее 50 тыс.
+все отмененные операции  — 50 копеек"},
+      rf_cards: {v:"2,9%
+мин. 2,5%"},
       foreign_cards: {v:"11,0%"},
       sbp: {v:"1,7%"},
       pay_methods: {v:"как карты"},
@@ -369,20 +406,24 @@ const providers = [
       card_binding: {v:"yes"},
       smz: {v:"no"},
       fiscal_smz: {v:"no"},
-      fiscal_54fz: {v:"partner", note:"Cloud-чеки +1,5% поверх операции + 1500 в год"},
+      fiscal_54fz: {v:"Cloud-чеки
++1,5% поверх операции + 1500 в год", note:"https://cheki.cloudpayments.ru/"},
       own_kassa: {v:"partner", note:"CloudKassir"},
       third_kassa: {v:"no"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 cloudpayments.ru"},
+      crm_cms: {v:"link", note:"https://cloudpayments.ru/integration/cms"},
     },
   },
   {
     id:"getcourse", name:"GetCourse", isPrimary:false,
     highlights:["GetCourse — платформа для онлайн-курсов, не платёжный шлюз; CRM только внутри платформы", "MirPay, МТС Pay, Газпром Pay — не поддерживаются", "Холдирование и привязка карты — есть у Robokassa, у GetCourse нет", "СБП дороже: от 3,5% против от 1,8% у Robokassa"],
     params:{
-      rf_cards: {v:"3,5% мин. 1,9%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"3,5%
+мин. 1,9%"},
       foreign_cards: {v:"10,0%"},
-      sbp: {v:"от 3,5% как карты"},
+      sbp: {v:"от 3,5%
+как карты"},
       pay_methods: {v:"как карты"},
       mirpay: {v:"no"},
       sberpay: {v:"yes"},
@@ -393,8 +434,14 @@ const providers = [
       yandexpay: {v:"yes"},
       yandex_split: {v:"yes"},
       bnpl: {v:"yes"},
-      installment: {v:"partner", note:"Покупай со Сбером Т-Банк Кредит POSCREDIT Фреш кредит Ресурс Развития (для КЗ и Беларуси)"},
-      credit: {v:"partner", note:"Покупай со Сбером Т-Банк Кредит Фреш кредит"},
+      installment: {v:"partner", note:"Покупай со Сбером
+Т-Банк Кредит
+POSCREDIT
+Фреш кредит
+Ресурс Развития (для КЗ и Беларуси)"},
+      credit: {v:"partner", note:"Покупай со Сбером
+Т-Банк Кредит
+Фреш кредит"},
       hold: {v:"no"},
       recurrents: {v:"yes"},
       card_binding: {v:"yes"},
@@ -402,7 +449,7 @@ const providers = [
       fiscal_smz: {v:"yes"},
       fiscal_54fz: {v:"yes"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"request", note:"На уточнении"},
+      third_kassa: {v:"request"},
       payout: {v:"Автоматический ежедневный вывод"},
       crm_cms: {v:"partner", note:"нет, работа только на GetCourse"},
     },
@@ -411,6 +458,7 @@ const providers = [
     id:"paykeeper", name:"PayKeeper", isPrimary:false,
     highlights:["Агрегатор-посредник: итоговая ставка зависит от банка-эквайера — нет прозрачности тарифов", "BNPL, рассрочка, кредит — полностью отсутствуют", "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay — не поддерживаются", "Нет фискализации по 54-ФЗ, нет работы с СМЗ"],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"1,85-2,25%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -433,15 +481,24 @@ const providers = [
       fiscal_smz: {v:"yes"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"partner", note:"PayKeeper Каssa"},
-      third_kassa: {v:"partner", note:"АТОЛ Онлайн OrangeData Kit Online Business Kassa"},
+      third_kassa: {v:"partner", note:"АТОЛ Онлайн
+OrangeData
+Kit Online
+Business Kassa"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 docs.paykeeper.ru"},
+      crm_cms: {v:"link", note:"https://docs.paykeeper.ru/cms/"},
     },
   },
   {
     id:"tbank", name:"Т-Банк", isPrimary:false,
-    highlights:[],
+    highlights:["Вывод только на р/с Т-Банка", "МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — не поддерживаются", "Нет работы с СМЗ, нет чеков для СМЗ"],
     params:{
+      osobennosti: {v:"- ежемесячная оплата за обслуживание счета (с ним тариф по интернет эквайрингу выгоднее) 490-4490 руб. в месяц в зависимости от типа счета
+- комиссия за неуспешные операции до 1 ₽ и минимальная комиссия за операцию 3,49 ₽
+- из pay-метолов сразу доступен только Т-pay, остальные включаются по запросу
+- брендирование платежной страницы под ваш корпоративный стиль
+- помощь в настройке/интеграции бесплатно
+конструктор сайта"},
       rf_cards: {v:"2,99-2,49%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -462,18 +519,26 @@ const providers = [
       card_binding: {v:"yes"},
       smz: {v:"no"},
       fiscal_smz: {v:"no"},
-      fiscal_54fz: {v:"partner", note:"Т-чеки +1,5% поверх операции"},
+      fiscal_54fz: {v:"Т-чеки
++1,5% поверх операции", note:"https://www.tbank.ru/business/online-payments/check/"},
       own_kassa: {v:"partner", note:"CloudKassir"},
-      third_kassa: {v:"request", note:"На уточнении"},
+      third_kassa: {v:"request"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 www.tinkoff.ru"},
+      crm_cms: {v:"link", note:"https://www.tinkoff.ru/kassa/develop/cms/"},
     },
   },
   {
     id:"alfabank", name:"Альфа-банк", isPrimary:false,
-    highlights:[],
+    highlights:["Нет фискализации 54-ФЗ, рекуррентов, привязки карты, работы с СМЗ", "Из pay-методов: только MirPay, SberPay, T-Pay, AlfaPay", "МТС Pay, Газпром Pay, Yandex Pay, Яндекс Сплит — не поддерживаются", "BNPL только через Подели; нет рассрочки и кредита"],
     params:{
-      rf_cards: {v:"2,6-2,7% (min 5 руб.)"},
+      osobennosti: {v:"Для новых пользователей действует акция 1% на 3 месяца на оборот до 500К
+Условия работы:
+- При подключении без р/с в Альфе СБП не доступен (только карты)
+- Менеджеры предлагают подключение по пакетному тарифу (карты +сбп), где нет % по экварингу, только фикс в месяц (зависит от указанного оборота), все что сверху оборота идет под 2,6%
+- Можно заключить несколько договоров на один кабинет на разные сферы деятельности (= разные ставки на разные магазины)
+- В личном кабинете будет название проектов, которое можно менять и указывать сайт к каждому проекту."},
+      rf_cards: {v:"2,6-2,7%
+(min 5 руб.)"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"как карты"},
@@ -495,15 +560,23 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"PayKeeper Каssa CloudKassir OrangeData Business Kassa АТОЛ Онлайн Комтет OrangeData Life pay"},
+      third_kassa: {v:"partner", note:"PayKeeper Каssa
+CloudKassir
+OrangeData
+Business Kassa
+АТОЛ Онлайн
+Комтет
+OrangeData
+Life pay"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 pay.alfabank.ru"},
+      crm_cms: {v:"link", note:"https://pay.alfabank.ru/ecommerce/?_ga=2.128492748.1701871728.1650021858-545709211.1648633114#cms"},
     },
   },
   {
     id:"ozonbank", name:"Ozon банк", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"2,2%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -524,18 +597,22 @@ const providers = [
       card_binding: {v:"yes"},
       smz: {v:"no"},
       fiscal_smz: {v:"yes"},
-      fiscal_54fz: {v:"partner", note:"Озон чеки 0,05% от чека"},
+      fiscal_54fz: {v:"partner", note:"Озон чеки
+0,05% от чека"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"request", note:"На уточнении"},
-      payout: {v:"Автоматический вывод только на р\\с Озон банка"},
+      third_kassa: {v:"request"},
+      payout: {v:"Автоматический вывод только на р\с Озон банка"},
       crm_cms: {v:"partner", note:"есть, ссылка на выяснении"},
     },
   },
   {
     id:"tochkabank", name:"Точка Банк", isPrimary:false,
-    highlights:[],
+    highlights:["Из pay-методов только T-Pay; MirPay, SberPay, AlfaPay — не поддерживаются", "Нет иностранных карт, нет BNPL, нет рассрочки, нет кредита", "Холд, рекурренты, привязка карты — на уточнении", "Нет фискализации для СМЗ"],
     params:{
-      rf_cards: {v:"3,0% (2,5% на старте) мин. 2,5%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"3,0%
+(2,5% на старте)
+мин. 2,5%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"как карты"},
@@ -550,24 +627,30 @@ const providers = [
       bnpl: {v:"partner", note:"Долями до 200 000 ₽"},
       installment: {v:"no"},
       credit: {v:"no"},
-      hold: {v:"request", note:"На уточнении"},
-      recurrents: {v:"request", note:"На уточнении"},
-      card_binding: {v:"request", note:"На уточнении"},
+      hold: {v:"request"},
+      recurrents: {v:"request"},
+      card_binding: {v:"request"},
       smz: {v:"yes"},
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"partner", note:"Сервис \"Точка чеки\""},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"PayKeeper Каssa Эватор LIFE POS БифитКасса АТОЛ Онлайн"},
+      third_kassa: {v:"partner", note:"PayKeeper Каssa
+Эватор
+LIFE POS
+БифитКасса
+АТОЛ Онлайн"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 tochka.com"},
+      crm_cms: {v:"link", note:"https://tochka.com/rko/integration/"},
     },
   },
   {
     id:"payture", name:"PayTure", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"3,2%-2,8%"},
-      foreign_cards: {v:"9% + 5% за конвертацию"},
+      foreign_cards: {v:"9%
++ 5% за конвертацию"},
       sbp: {v:"unknown"},
       pay_methods: {v:"как карты"},
       mirpay: {v:"yes"},
@@ -578,7 +661,8 @@ const providers = [
       gazprompay: {v:"no"},
       yandexpay: {v:"no"},
       yandex_split: {v:"no"},
-      bnpl: {v:"partner", note:"Мокка Миг Кредит"},
+      bnpl: {v:"partner", note:"Мокка
+Миг Кредит"},
       installment: {v:"no"},
       credit: {v:"no"},
       hold: {v:"yes"},
@@ -588,16 +672,19 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"Orange Data АТОЛ Онлайн"},
+      third_kassa: {v:"partner", note:"Orange Data
+АТОЛ Онлайн"},
       payout: {v:"Автоматический вывод на сл. рабочий день"},
-      crm_cms: {v:"partner", note:"🔗 payture.com"},
+      crm_cms: {v:"link", note:"https://payture.com/api/#moduls_"},
     },
   },
   {
     id:"paymaster", name:"Pay Master", isPrimary:false,
-    highlights:["Нет pay-методов, нет BNPL, нет рассрочки, нет фискализации 54-ФЗ", "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит", "Нет работы с СМЗ", "Минимальный набор функций по сравнению с Robokassa"],
+    highlights:["Нет pay-методов, нет BNPL, нет рассрочки, нет фискализации 54-ФЗ", "Нет МТС Pay, Альфа Pay, Газпром Pay, Yandex Pay, Яндекс Сплит", "Нет работы с СМЗ"],
     params:{
-      rf_cards: {v:"2,95-2,0% мин. 2,0%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"2,95-2,0%
+мин. 2,0%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"no"},
@@ -619,15 +706,21 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"Первый ОФД АТОЛ Онлайн OrangeData BusinessKassa МодульКасса Такском-касса"},
+      third_kassa: {v:"partner", note:"Первый ОФД
+АТОЛ Онлайн
+OrangeData
+BusinessKassa
+МодульКасса
+Такском-касса"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 info.paymaster.ru"},
+      crm_cms: {v:"link", note:"https://info.paymaster.ru/moduli-cms/"},
     },
   },
   {
     id:"arsenalpay", name:"Arsenal Pay", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"0.026"},
       foreign_cards: {v:"no"},
       sbp: {v:"no"},
@@ -648,18 +741,21 @@ const providers = [
       card_binding: {v:"no"},
       smz: {v:"no"},
       fiscal_smz: {v:"no"},
-      fiscal_54fz: {v:"partner", note:"ArsenalPay 0,2% от чека"},
+      fiscal_54fz: {v:"partner", note:"ArsenalPay
+0,2% от чека"},
       own_kassa: {v:"partner", note:"Web-касса ArsenalPay"},
       third_kassa: {v:"no"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 arsenalpay.ru"},
+      crm_cms: {v:"link", note:"https://arsenalpay.ru/developers.html"},
     },
   },
   {
     id:"modulbank", name:"Модуль Банк", isPrimary:false,
-    highlights:[],
+    highlights:["Вывод только на р/с Модуль Банка; моментальный +0,2%", "Нет pay-методов, нет холдирования, нет BNPL", "Фискализация платная: МодульКасса 0,8–1,1% от чека (нельзя с маркировкой)", "Нет работы с СМЗ"],
     params:{
-      rf_cards: {v:"от 1,89% (2,49% на старте)"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"от 1,89%
+(2,49% на старте)"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"no"},
@@ -679,10 +775,14 @@ const providers = [
       card_binding: {v:"no"},
       smz: {v:"no"},
       fiscal_smz: {v:"yes"},
-      fiscal_54fz: {v:"partner", note:"Сервис \"Облачные чеки\" 0,8-1,1% от чека (уже с НДС)"},
-      own_kassa: {v:"partner", note:"МодульКасса нельзя использовать с маркировкой"},
+      fiscal_54fz: {v:"partner", note:"Сервис \"Облачные чеки\"
+0,8-1,1% от чека (уже с НДС)"},
+      own_kassa: {v:"partner", note:"МодульКасса
+нельзя использовать с маркировкой"},
       third_kassa: {v:"unknown"},
-      payout: {v:"Автоматический ежедневный вывод только на р/с банка Моментальное зачисление +0,2%"},
+      payout: {v:"Автоматический ежедневный вывод только на р/с банка
+Моментальное зачисление
++0,2%"},
       crm_cms: {v:"partner", note:"есть (подробнее на сайте)"},
     },
   },
@@ -690,7 +790,9 @@ const providers = [
     id:"uralbank", name:"Уральский Банк", isPrimary:false,
     highlights:[],
     params:{
-      rf_cards: {v:"от 2,35% мин. 1,30%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"от 2,35%
+мин. 1,30%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"no"},
@@ -707,21 +809,28 @@ const providers = [
       credit: {v:"no"},
       hold: {v:"yes"},
       recurrents: {v:"yes"},
-      card_binding: {v:"request", note:"На уточнении"},
+      card_binding: {v:"request"},
       smz: {v:"no"},
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"PayKeeper Каssa BusinessKassa Kit Online Orange Data АТОЛ Онлайн"},
+      third_kassa: {v:"partner", note:"PayKeeper Каssa
+BusinessKassa
+Kit Online
+Orange Data
+АТОЛ Онлайн"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 ecom.ubrr.ru"},
+      crm_cms: {v:"link", note:"https://ecom.ubrr.ru/cms/"},
     },
   },
   {
     id:"vtbbank", name:"ВТБ Банк", isPrimary:false,
     highlights:[],
     params:{
-      rf_cards: {v:"на сайте нет инфы от 3,00% мин. 0,50%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"на сайте нет инфы
+от 3,00%
+мин. 0,50%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"no"},
@@ -752,6 +861,7 @@ const providers = [
     id:"gazprombank", name:"Газпром Банк", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"на сайте нет инфы"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -783,6 +893,7 @@ const providers = [
     id:"raiffeisen", name:"Райффайзен банк", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"2,70%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -807,13 +918,14 @@ const providers = [
       own_kassa: {v:"no"},
       third_kassa: {v:"partner", note:"PayKeeper Каssa"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 github.com"},
+      crm_cms: {v:"link", note:"https://github.com/Raiffeisen-DGTL/ecom-sdk-javascript"},
     },
   },
   {
     id:"uniteller", name:"Uniteller", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"2,4%/2,3%"},
       foreign_cards: {v:"есть"},
       sbp: {v:"no"},
@@ -836,7 +948,7 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"🔗 www.uniteller.ru"},
+      third_kassa: {v:"link", note:"https://www.uniteller.ru/fz-54/"},
       payout: {v:"Автоматический ежедневный вывод"},
       crm_cms: {v:"partner", note:"нет"},
     },
@@ -845,6 +957,7 @@ const providers = [
     id:"unitpay", name:"UnitPay", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"от 3,5%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,7%"},
@@ -865,17 +978,23 @@ const providers = [
       card_binding: {v:"no"},
       smz: {v:"no"},
       fiscal_smz: {v:"no"},
-      fiscal_54fz: {v:"partner", note:"Юнит.Чеки 0,1% от чека"},
+      fiscal_54fz: {v:"partner", note:"Юнит.Чеки
+0,1% от чека"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"Атол-касса Модуль-касса E-COM KASSA Kit Online Digitalkassa"},
+      third_kassa: {v:"partner", note:"Атол-касса
+Модуль-касса
+E-COM KASSA
+Kit Online
+Digitalkassa"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 help.unitpay.ru"},
+      crm_cms: {v:"link", note:"https://help.unitpay.ru/modules"},
     },
   },
   {
     id:"best2pay", name:"Best2pay", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"3,20%"},
       foreign_cards: {v:"no"},
       sbp: {v:"no"},
@@ -900,16 +1019,18 @@ const providers = [
       own_kassa: {v:"yes"},
       third_kassa: {v:"yes"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 best2pay.net"},
+      crm_cms: {v:"link", note:"https://best2pay.net/support/cms-moduli/"},
     },
   },
   {
     id:"lifepay", name:"Life Pay", isPrimary:false,
     highlights:["Тарифы зависят от категории — нет прозрачности", "Нет pay-методов, нет BNPL, нет холдирования, нет фискализации 54-ФЗ", "СБП: 0,4–0,7%, но абонплата 500 ₽/мес за 1 сайт", "Нет работы с СМЗ"],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"зависит от категории"},
       foreign_cards: {v:"no"},
-      sbp: {v:"0,4-0,7% 500 руб./мес за 1 сайт"},
+      sbp: {v:"0,4-0,7%
+500 руб./мес за 1 сайт"},
       pay_methods: {v:"no"},
       mirpay: {v:"no"},
       sberpay: {v:"no"},
@@ -931,13 +1052,15 @@ const providers = [
       own_kassa: {v:"partner", note:"LIFE PAY касса"},
       third_kassa: {v:"no"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 life-pay.ru"},
+      crm_cms: {v:"link", note:"https://life-pay.ru/acquiring/internet-acquiring/"},
     },
   },
   {
     id:"payselection", name:"Pay Selection", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"процессинговый центр- 8 банков
+ежемесячная абонетка - 15 000 руб."},
       rf_cards: {v:"4,7% / 2,7-3%"},
       foreign_cards: {v:"no"},
       sbp: {v:"3% или 1%"},
@@ -960,18 +1083,20 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"? уточняем этот вопросик"},
+      third_kassa: {v:"unknown"},
       payout: {v:"Автоматический ежедневный вывод на сл.раб.день"},
-      crm_cms: {v:"partner", note:"🔗 payselection.com"},
+      crm_cms: {v:"link", note:"https://payselection.com/paycode"},
     },
   },
   {
     id:"walletone", name:"Wallet One", isPrimary:false,
     highlights:["СБП привязан к тарифу карт: 2,7%–2,1% — существенно выше рынка", "Нет BNPL, нет рассрочки, нет холдирования", "Нет фискализации 54-ФЗ, нет работы с СМЗ"],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"2,7%-2,1%"},
       foreign_cards: {v:"no"},
-      sbp: {v:"2,7%-2,1% как карты"},
+      sbp: {v:"2,7%-2,1%
+как карты"},
       pay_methods: {v:"выше. на 0,5%, чем карты"},
       mirpay: {v:"yes"},
       sberpay: {v:"yes"},
@@ -993,13 +1118,14 @@ const providers = [
       own_kassa: {v:"yes"},
       third_kassa: {v:"yes"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 www.walletone.com"},
+      crm_cms: {v:"link", note:"https://www.walletone.com/ru/merchant/modules/"},
     },
   },
   {
     id:"payanway", name:"Pay any Way", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"3,4%/2,7%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -1024,14 +1150,16 @@ const providers = [
       own_kassa: {v:"yes"},
       third_kassa: {v:"yes"},
       payout: {v:"Автоматический ежедневный вывод"},
-      crm_cms: {v:"partner", note:"🔗 www.payanyway.ru"},
+      crm_cms: {v:"link", note:"https://www.payanyway.ru/info/w/ru/public/w/partnership/developers/cms.html"},
     },
   },
   {
     id:"method", name:"Совкомбанк ведет в Method", isPrimary:false,
     highlights:[],
     params:{
-      rf_cards: {v:"от 2,80% Min 2,40%"},
+      osobennosti: {v:"unknown"},
+      rf_cards: {v:"от 2,80%
+Min 2,40%"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
       pay_methods: {v:"как карты"},
@@ -1043,9 +1171,12 @@ const providers = [
       gazprompay: {v:"no"},
       yandexpay: {v:"yes"},
       yandex_split: {v:"no"},
-      bnpl: {v:"partner", note:"Плайт Подели"},
-      installment: {v:"partner", note:"Всегда да FinBox"},
-      credit: {v:"partner", note:"Всегда да FinBox"},
+      bnpl: {v:"partner", note:"Плайт
+Подели"},
+      installment: {v:"partner", note:"Всегда да
+FinBox"},
+      credit: {v:"partner", note:"Всегда да
+FinBox"},
       hold: {v:"yes"},
       recurrents: {v:"yes"},
       card_binding: {v:"yes"},
@@ -1053,7 +1184,12 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"no"},
       own_kassa: {v:"no"},
-      third_kassa: {v:"partner", note:"CloudKassir OrangeData Business Kassa АТОЛ Онлайн Kit Online Digitalkassa"},
+      third_kassa: {v:"partner", note:"CloudKassir
+OrangeData
+Business Kassa
+АТОЛ Онлайн
+Kit Online
+Digitalkassa"},
       payout: {v:"Автоматический ежедневный вывод"},
       crm_cms: {v:"partner", note:"есть (подробнее на сайте)"},
     },
@@ -1062,6 +1198,7 @@ const providers = [
     id:"russtandart", name:"Банк Русский Стандарт", isPrimary:false,
     highlights:[],
     params:{
+      osobennosti: {v:"unknown"},
       rf_cards: {v:"зависит от категории"},
       foreign_cards: {v:"no"},
       sbp: {v:"0,4-0,7%"},
@@ -1086,7 +1223,7 @@ const providers = [
       own_kassa: {v:"no"},
       third_kassa: {v:"partner", note:"OFD ru"},
       payout: {v:"Автоматический вывод на сл. рабочий день"},
-      crm_cms: {v:"partner", note:"🔗 ecom.rsb.ru"},
+      crm_cms: {v:"link", note:"https://ecom.rsb.ru/cms/"},
     },
   },
 ];
@@ -1140,6 +1277,15 @@ function render(){
     hlArea.style.display='block';
     hlArea.innerHTML=`<div class="highlights"><div class="hl-title">Ключевые отличия: Robokassa vs ${esc(curRival.name)}</div>${hl.map(h=>`<div class="hl-item"><span class="hl-dot"></span>${esc(h)}</div>`).join('')}</div>`;
   } else { hlArea.innerHTML=''; hlArea.style.display='none'; }
+  // Особенности подключения
+  const notesArea=document.getElementById('notes-area');
+  const notesVal=curRival.params&&curRival.params.osobennosti?curRival.params.osobennosti.v:'';
+  const notesNote=curRival.params&&curRival.params.osobennosti?curRival.params.osobennosti.note||'':'';
+  const notesText=notesVal&&notesVal!=='unknown'&&notesVal!=='yes'&&notesVal!=='no'?notesVal:notesNote;
+  if(notesText&&notesText.trim()){
+    notesArea.style.display='block';
+    notesArea.innerHTML=`<div class="notes"><div class="notes-title">⚠ Особенности подключения: ${esc(curRival.name)}</div><div class="notes-text">${esc(notesText.trim())}</div></div>`;
+  } else { notesArea.innerHTML=''; notesArea.style.display='none'; }
   const area=document.getElementById('cmp-area'); area.innerHTML='';
   sections.forEach(sec=>{
     const block=document.createElement('div'); block.className='section';
