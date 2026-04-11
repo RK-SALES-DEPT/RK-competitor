@@ -119,7 +119,6 @@
     @media (max-width: 768px) { body { padding: 20px 14px 52px; } .brand-logo { width: 32px; } .hero h1 { font-size: 22px; } .ch-tag { display: none; } }
     @media (max-width: 580px) { .col-header, .param-row { grid-template-columns: 1.1fr 1fr 1fr; } .col-header { position: static; } .ch-eyebrow { display: none; } .ch-name { font-size: 12px; } .p-label { font-size: 11px; padding: 9px 12px; } .p-cell { padding: 8px 10px; } .chip { font-size: 10px; padding: 2px 7px; } .val-text { font-size: 11px; } }
   </style>
-<style id="rk-css">.p-cell:has(a.p-link) .chip-ptn,.p-cell:has(a.p-link-full) .chip-ptn { display: none; }.p-link,.p-link-full { font-size:12px; font-weight:600; color:#525FFB; text-decoration:none; }.p-link:hover,.p-link-full:hover { text-decoration:underline; }</style>
 </head>
 <body>
 <div class="page">
@@ -1245,28 +1244,8 @@ rivals.forEach(r=>{const o=document.createElement('option');o.value=r.id;o.textC
 sel.addEventListener('change',e=>{curRival=rivals.find(r=>r.id===e.target.value)||rivals[0];render();});
 document.getElementById('btn-all').addEventListener('click',()=>{if(mode==='all')return;mode='all';document.getElementById('btn-all').classList.add('on');document.getElementById('btn-diff').classList.remove('on');applyMode();});
 document.getElementById('btn-diff').addEventListener('click',()=>{if(mode==='diff')return;mode='diff';document.getElementById('btn-diff').classList.add('on');document.getElementById('btn-all').classList.remove('on');applyMode();});
-renderVal=function(p){if(!p||p.v===undefined||String(p.v).trim()==="")return"<span class=\"val-unk\">—</span>";var v=String(p.v).trim(),note=p.note||"";function iu(s){return s&&(s.indexOf("http://")==0||s.indexOf("https://")==0);}function ud(u){return u.replace(/https?:\/\/www\.?/,"").split("/")[0].split("?")[0];}function lnk(u,t){return"<a href=\""+u+"\" target=\"_blank\" style=\"color:#525FFB;font-weight:600;font-size:12px;text-decoration:none\">🔗 "+t+"</a>";}var ni=iu(note);if(v==="unknown")return"<span class=\"val-unk\">Нет данных</span>";if(v==="link"&&ni)return lnk(note,ud(note));if(iu(v))return lnk(v,ud(v));var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};function es(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}if(v!=="partner"&&VL[v]){var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,ud(note))+"</div>":"<div class=\"p-note\">"+es(note)+"</div>"):"";return"<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;}if(v==="partner"&&ni)return lnk(note,ud(note));if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}if(ni)return lnk(note,es(v));var nh3=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\"val-text\">"+es(v)+"</span>"+nh3;};
-renderVal=function(p){if(!p||p.v===undefined||String(p.v).trim()==="")return"<span class=\"val-unk\">—</span>";var v=String(p.v).trim(),note=p.note||"";function iu(s){return s&&(s.indexOf("http://")==0||s.indexOf("https://")==0);}function ud(u){return u.replace(/https?:\/\/www\.?/,"").split("/")[0].split("?")[0];}function lnk(u,t){return"<a href=\""+u+"\" target=\"_blank\" style=\"color:#525FFB;font-weight:600;font-size:12px;text-decoration:none\">🔗 "+t+"</a>";}var ni=iu(note);if(v==="unknown")return"<span class=\"val-unk\">Нет данных</span>";if(v==="link"&&ni)return lnk(note,ud(note));if(iu(v))return lnk(v,ud(v));var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};function es(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}if(v!=="partner"&&VL[v]){var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,ud(note))+"</div>":"<div class=\"p-note\">"+es(note)+"</div>"):"";return"<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;}if(v==="partner"&&ni)return lnk(note,ud(note));if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}if(ni)return lnk(note,es(v));var nh3=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\"val-text\">"+es(v)+"</span>"+nh3;};
+renderVal=function(p){if(!p||p.v===undefined||String(p.v).trim()==="")return"<span class=\"val-unk\">—</span>";var v=String(p.v).trim(),note=p.note||"";function iu(s){return s&&(s.indexOf("http://")==0||s.indexOf("https://")==0);}function ud(u){return u.replace(/https?:\/\/(www\.)?/,"").split("/")[0].split("?")[0];}function lnk(u,t){return"<a href=\""+u+"\" target=\"_blank\" style=\"color:#525FFB;font-weight:600;font-size:12px;text-decoration:none\">🔗 "+t+"</a>";}var ni=iu(note);if(v==="unknown")return"<span class=\"val-unk\">Нет данных</span>";if(v==="link"&&ni)return lnk(note,ud(note));if(iu(v))return lnk(v,ud(v));var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};function es(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}if(v!=="partner"&&VL[v]){var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,ud(note))+"</div>":"<div class=\"p-note\">"+es(note)+"</div>"):"";return"<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;}if(v==="partner"&&ni)return lnk(note,ud(note));if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}if(ni)return lnk(note,es(v));var nh3=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\"val-text\">"+es(v)+"</span>"+nh3;};
 render();
-</script>
-<script id="rk-patch">
-(function(){
-  function fixChips(){
-    document.querySelectorAll(".p-cell").forEach(function(cell){
-      var chip = cell.querySelector(".chip-ptn");
-      var link = cell.querySelector(".p-note a[href], a.p-link-full, a.p-link");
-      if(chip && link) chip.style.display="none";
-    });
-  }
-  // Перехватываем render() чтобы фикс работал при смене конкурента
-  var _origRender = typeof render==="function" ? render : null;
-  if(_origRender){
-    render = function(){ _origRender.apply(this,arguments); fixChips(); };
-    render();
-  } else {
-    document.addEventListener("DOMContentLoaded", fixChips);
-  }
-})();
 </script>
 </body>
 </html>
