@@ -299,7 +299,7 @@ const providers = [
       rf_cards: {v:"3,5%\nмин. 2,8%"},
       foreign_cards: {v:"4,0%"},
       sbp: {v:"0,4-0,7%\nлимит 700К"},
-      pay_methods: {v:"как карты\nТ-pay 3,8%"},
+      pay_methods: {v:"как карты"},
       mirpay: {v:"yes"},
       sberpay: {v:"yes"},
       tpay: {v:"yes"},
@@ -308,9 +308,9 @@ const providers = [
       gazprompay: {v:"no"},
       yandexpay: {v:"no"},
       yandex_split: {v:"no"},
-      bnpl: {v:"partner", note:"Плати Частями от Сбер до 150 000 ₽"},
-      installment: {v:"partner", note:"Покупай со Сбером"},
-      credit: {v:"partner", note:"Покупай со Сбером"},
+      bnpl: {v:"partner", note:"«Плати частями» от Сбера (до 50 000 ₽)"},
+      installment: {v:"partner", note:"«‎Покупки в кредит»‎ от Сбер"},
+      credit: {v:"partner", note:"«‎Покупки в кредит»‎ от Сбер"},
       hold: {v:"yes"},
       recurrents: {v:"yes"},
       card_binding: {v:"no"},
@@ -318,7 +318,7 @@ const providers = [
       fiscal_smz: {v:"no"},
       fiscal_54fz: {v:"Чеки от ЮKassa\nидет как доп. комиссия поверх тарифа (зависит от оборота)"},
       own_kassa: {v:"link", note:"https://yookassa.ru"},
-      third_kassa: {v:"yes"},
+      third_kassa: {v:"partner", note:"Эватор Первый ОФД АТОЛ Онлайн Kit Online Комтет МодульКасса ОК РЕСТАРТ"},
       payout: {v:"Автоматический ежедневный вывод"},
       crm_cms: {v:"link", note:"https://yookassa.ru"},
     },
@@ -1244,6 +1244,8 @@ rivals.forEach(r=>{const o=document.createElement('option');o.value=r.id;o.textC
 sel.addEventListener('change',e=>{curRival=rivals.find(r=>r.id===e.target.value)||rivals[0];render();});
 document.getElementById('btn-all').addEventListener('click',()=>{if(mode==='all')return;mode='all';document.getElementById('btn-all').classList.add('on');document.getElementById('btn-diff').classList.remove('on');applyMode();});
 document.getElementById('btn-diff').addEventListener('click',()=>{if(mode==='diff')return;mode='diff';document.getElementById('btn-diff').classList.add('on');document.getElementById('btn-all').classList.remove('on');applyMode();});
+document.head.insertAdjacentHTML("beforeend","<style>.p-cell--rk .chip-ptn{display:none}<\/style>");
+renderVal=function(p){if(!p||p.v===undefined||String(p.v).trim()==="")return"<span class=\"val-unk\">—</span>";var v=String(p.v).trim(),note=p.note||"";function iu(s){return s&&(s.indexOf("http://")==0||s.indexOf("https://")==0);}function ud(u){return u.replace(/https?:\/\/(www\.)?/,"").split("/")[0].split("?")[0];}function lnk(u,t){return"<a href=\""+u+"\" target=\"_blank\" style=\"color:#525FFB;font-weight:600;font-size:12px;text-decoration:none\">🔗 "+t+"</a>";}var ni=iu(note);if(v==="unknown")return"<span class=\"val-unk\">Нет данных</span>";if(v==="link"&&ni)return lnk(note,ud(note));if(iu(v))return lnk(v,ud(v));var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};function es(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}if(v!=="partner"&&VL[v]){var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,ud(note))+"</div>":"<div class=\"p-note\">"+es(note)+"</div>"):"";return"<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;}if(v==="partner"&&ni)return lnk(note,ud(note));if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}if(ni)return lnk(note,es(v));var nh3=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\"val-text\">"+es(v)+"</span>"+nh3;};
 document.head.insertAdjacentHTML("beforeend","<style>.p-cell--rk .chip-ptn{display:none}<\/style>");
 renderVal=function(p){if(!p||p.v===undefined||String(p.v).trim()==="")return"<span class=\"val-unk\">—</span>";var v=String(p.v).trim(),note=p.note||"";function iu(s){return s&&(s.indexOf("http://")==0||s.indexOf("https://")==0);}function ud(u){return u.replace(/https?:\/\/(www\.)?/,"").split("/")[0].split("?")[0];}function lnk(u,t){return"<a href=\""+u+"\" target=\"_blank\" style=\"color:#525FFB;font-weight:600;font-size:12px;text-decoration:none\">🔗 "+t+"</a>";}var ni=iu(note);if(v==="unknown")return"<span class=\"val-unk\">Нет данных</span>";if(v==="link"&&ni)return lnk(note,ud(note));if(iu(v))return lnk(v,ud(v));var VL={yes:"Есть",no:"Нет",partial:"Частично",partner:"Через партнёра",request:"По запросу",soon:"Скоро"};var VI={yes:"✓",no:"✕",partial:"≈",partner:"↗",soon:"◷",request:"~"};var VC={yes:"chip chip-yes",no:"chip chip-no",partial:"chip chip-par",partner:"chip chip-ptn",request:"chip chip-req",soon:"chip chip-soon"};function es(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}if(v!=="partner"&&VL[v]){var nh=note?(ni?"<div class=\"p-note\">"+lnk(note,ud(note))+"</div>":"<div class=\"p-note\">"+es(note)+"</div>"):"";return"<span class=\""+VC[v]+"\"><i>"+VI[v]+"</i> "+VL[v]+"</span>"+nh;}if(v==="partner"&&ni)return lnk(note,ud(note));if(v==="partner"){var nh2=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\""+VC.partner+"\"><i>"+VI.partner+"</i> "+VL.partner+"</span>"+nh2;}if(ni)return lnk(note,es(v));var nh3=note?"<div class=\"p-note\">"+es(note)+"</div>":"";return"<span class=\"val-text\">"+es(v)+"</span>"+nh3;};
 render();
